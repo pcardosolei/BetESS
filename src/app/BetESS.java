@@ -64,6 +64,7 @@ public class BetESS {
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
+        System.out.println("Criar Aposta");
         System.out.println("Opcao:");
     }
     
@@ -94,16 +95,19 @@ public class BetESS {
    
    
     public static void criarAposta(){
-        int codigo;
+        int codigo,valor,opcao;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
         codigo = in.nextInt();
+        System.out.println("Qual e a sua opcao:");
+        opcao=in.nextInt();
+        System.out.println("Que valor prentende apostar:");
+        valor=in.nextInt();
       try{
-            System.out.println(eventos.get(codigo).toString());
-            System.out.println("Escolha a Opcao ");
             
+          eventos.get(codigo).novaAposta(valor, opcao);
+          
             
-            Aposta aposta = new Aposta();
     } catch(Exception e){
             System.out.println("Não encontrou o evento");
         }
@@ -132,7 +136,20 @@ public class BetESS {
         System.out.println("Evento Criado");
     }
     
+<<<<<<< HEAD
+    public static String listaApostas(){
+    
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE=System.getProperty("line.separator");
+        
+        
+        return result.toString();
+    }
+    
+    public static String listaEventos(){
+=======
     public static void listaEventos(){
+>>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
