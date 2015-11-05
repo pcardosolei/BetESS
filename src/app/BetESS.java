@@ -122,4 +122,18 @@ public class BetESS {
         }
 
     }
+
+  
+    
+    
+    //inicializar com alguns dados.
+    public static void dadosAplicacao(){
+
+          Apostador apostador1 = new Apostador("luis","luis@gmail.com",0);
+          Apostador apostador2 = new Apostador("paulo","paulo@gmail.com",0);
+          apostadores.put(apostadores.size(),apostador1);
+          apostadores.put(apostadores.size(),apostador2);
+          
+    }
+
 }

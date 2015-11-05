@@ -5,6 +5,8 @@
  */
 package Eventos;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author PauloCardoso
@@ -15,12 +17,13 @@ public class Evento {
     private float[] odds;
     private boolean estado; //true = aberto
     private int vencedor;
-    private Historico historico;
+    private ArrayList<Historico> historico;
     
     public Evento(){
         equipas = new String[3];
         odds = new float[3];
         estado = false;
+        historico = new ArrayList<>();
     }
     
     public Evento(String[] equipas, float[] odds, boolean estado){
@@ -33,6 +36,7 @@ public class Evento {
         this.odds[1] = odds[1];
         this.odds[2] = odds[2];
         this.estado = estado;
+        historico = new ArrayList<>();
     }
 
     /**
@@ -60,6 +64,7 @@ public class Evento {
      * @param odds the odds to set
      */
     public void setOdds(float[] odds) {
+        actualizaOdds();
         this.odds = odds;
     }
 
@@ -91,6 +96,11 @@ public class Evento {
         this.vencedor = vencedor;
     }
     
+    public void actualizaOdds(){
+        Historico actual = new Historico(this.getOdds());
+        historico.add(actual);
+    }
+    
     public String toString(){
         
         
@@ -102,6 +112,13 @@ public class Evento {
             result.append( equipas[i] + " " + odds[i] + "|"); 
         }
         result.append(NEW_LINE);
+          for(Historico h: historico){
+            result.append(h.toString());
+            result.append(NEW_LINE);
+        }
+        
         return result.toString();
         }
+    
+
 }

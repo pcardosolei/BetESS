@@ -5,21 +5,36 @@
  */
 package Eventos;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 /**
  *
  * @author PauloCardoso
  */
 public class Historico {
-    private String[] equipas;
-    private int[] odds;
-    //private time 
+    private float[] odds;
+    private Date data;
 
-    public Historico(){
-        
+ 
+    public Historico(float[] odds){
+        GregorianCalendar cal = new GregorianCalendar();
+        this.odds = new float[3];
+        this.odds[0] = odds[0];
+        this.odds[1] = odds[1];
+        this.odds[2] = odds[2];
+        this.data = cal.getTime();
     }
     
-    public Historico(String[] equipas, int[] odds){
-        this.equipas = equipas;
-        this.odds = odds;
+    public String toString(){
+        
+        int i;
+        StringBuilder result = new StringBuilder();
+
+        for(i=0; i < 3; i++){
+            result.append(this.odds[i]+" ");
+        }
+        result.append(this.data+"\n");
+        return result.toString();      
     }
+    
 }

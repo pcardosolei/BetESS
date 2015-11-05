@@ -60,8 +60,8 @@ public class Eventos {
         int codigo;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
-        codigo = in.nextInt();
         try{
+            codigo = in.nextInt();
             System.out.println(getJogos().get(codigo).toString());
             equipas = getJogos().get(codigo).getEquipas();
             System.out.println("Odd Vitoria " + equipas[0]);
@@ -70,7 +70,7 @@ public class Eventos {
             odds[1] = in.nextFloat();
             System.out.println("Odd Vitoria " + equipas[2]);
             odds[2] = in.nextFloat(); 
-            getJogos().get(codigo).setOdds(odds);
+            jogos.get(codigo).setOdds(odds);
         } catch(Exception e){
             System.out.println("Não encontrou o evento");
         }
