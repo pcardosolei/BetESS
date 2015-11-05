@@ -37,6 +37,7 @@ public class Evento {
         this.odds[2] = odds[2];
         this.estado = estado;
         historico = new ArrayList<>();
+        actualizaOdds();
     }
 
     /**
@@ -64,8 +65,8 @@ public class Evento {
      * @param odds the odds to set
      */
     public void setOdds(float[] odds) {
-        actualizaOdds();
         this.odds = odds;
+        actualizaOdds();
     }
 
     /**
@@ -98,7 +99,7 @@ public class Evento {
     
     public void actualizaOdds(){
         Historico actual = new Historico(this.getOdds());
-        historico.add(actual);
+        getHistorico().add(actual);
     }
     
     public String toString(){
@@ -112,13 +113,27 @@ public class Evento {
             result.append( equipas[i] + " " + odds[i] + "|"); 
         }
         result.append(NEW_LINE);
-          for(Historico h: historico){
+          for(Historico h: getHistorico()){
             result.append(h.toString());
             result.append(NEW_LINE);
         }
         
         return result.toString();
         }
+
+    /**
+     * @return the historico
+     */
+    public ArrayList<Historico> getHistorico() {
+        return historico;
+    }
+
+    /**
+     * @param historico the historico to set
+     */
+    public void setHistorico(ArrayList<Historico> historico) {
+        this.historico = historico;
+    }
     
 
 }
