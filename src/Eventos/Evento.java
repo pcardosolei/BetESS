@@ -26,11 +26,8 @@ public class Evento {
         equipas = new String[3];
         odds = new float[3];
         estado = false;
-<<<<<<< HEAD
         apostas = new ArrayList<>();
-=======
         historico = new ArrayList<>();
->>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
     }
     
     public Evento(String[] equipas, float[] odds, boolean estado){

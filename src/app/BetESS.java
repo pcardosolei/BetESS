@@ -136,7 +136,7 @@ public class BetESS {
         System.out.println("Evento Criado");
     }
     
-<<<<<<< HEAD
+
     public static String listaApostas(){
     
         StringBuilder result = new StringBuilder();
@@ -146,10 +146,9 @@ public class BetESS {
         return result.toString();
     }
     
-    public static String listaEventos(){
-=======
+   
+
     public static void listaEventos(){
->>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
