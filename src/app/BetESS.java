@@ -5,7 +5,7 @@
  */
 package app;
 
-import Eventos.Eventos;
+import Eventos.Evento;
 import Utilizadores.Aposta;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
@@ -24,11 +24,11 @@ public class BetESS {
      */
     private static HashMap<Integer,Apostador> apostadores;
     private static ArrayList<Bookie> bookies;
-    private static Eventos eventos;
+    private static HashMap<Integer,Evento> eventos;
     
     public static void main(String[] args) {
         // TODO code application logic here
-        eventos = new Eventos();
+        eventos = new HashMap<>();
         bookies = new ArrayList<>();
         apostadores = new HashMap<>();
         
@@ -46,7 +46,7 @@ public class BetESS {
                 
             case 2: criarEvento();
                 break;
-            case 3: mostrarEventos();
+            case 3: listaEventos();
                 break;
             case 4: editarOdds();
                 break;
@@ -93,18 +93,6 @@ public class BetESS {
    }
    
    
-   //bookie
-   public static void criarEvento(){
-       eventos.criarEvento();
-   }
-   
-   public static void mostrarEventos(){
-       System.out.println(eventos.listaEventos());
-   }
-   
-   public static void editarOdds(){
-       eventos.editarOdds();
-   }
    
     public static void criarAposta(){
         int codigo;
@@ -112,7 +100,7 @@ public class BetESS {
         System.out.println("Introduza o código do evento");
         codigo = in.nextInt();
       try{
-            System.out.println(eventos.getJogos().get(codigo).toString());
+            System.out.println(eventos.get(codigo).toString());
             System.out.println("Escolha a Opcao ");
             
             
@@ -122,4 +110,63 @@ public class BetESS {
         }
 
     }
+       //bookie
+
+    public static void criarEvento(){
+        
+        String[] equipas = new String[2];
+        float[] odds = new float[3];
+        Scanner in = new Scanner(System.in);
+        System.out.println("Equipa1");
+        equipas[0] = in.nextLine();
+        System.out.println("Equipa2");
+        equipas[1] = in.nextLine();
+        System.out.println("Odd Vitoria Equipa1");
+        odds[0] = in.nextFloat();
+        System.out.println("Odd Empate");
+        odds[1] = in.nextFloat();
+        System.out.println("Odd Vitoria Equipa2");
+        odds[2] = in.nextFloat();
+                     
+        Evento evento = new Evento(equipas,odds,true);
+        eventos.put(eventos.size(),evento);
+        System.out.println("Evento Criado");
+    }
+    
+    public static String listaEventos(){
+        
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        for(Integer evento: eventos.keySet())
+        {
+            result.append("EVENTO " + evento + NEW_LINE);
+            result.append(eventos.get(evento).toString()); 
+        }
+        result.append(NEW_LINE);
+        return result.toString();
+    }
+    
+    public static void editarOdds(){
+        float[] odds = new float[3];
+        String[] equipas = new String[3];
+        int codigo;
+        Scanner in = new Scanner(System.in);
+        System.out.println("Introduza o código do evento");
+        codigo = in.nextInt();
+        try{
+            System.out.println(eventos.get(codigo).toString());
+            equipas = eventos.get(codigo).getEquipas();
+            System.out.println("Odd Vitoria " + equipas[0]);
+            odds[0] = in.nextFloat();
+            System.out.println("Odd Empate");
+            odds[1] = in.nextFloat();
+            System.out.println("Odd Vitoria " + equipas[2]);
+            odds[2] = in.nextFloat(); 
+            eventos.get(codigo).setOdds(odds);
+        } catch(Exception e){
+            System.out.println("Não encontrou o evento");
+        }
+        
+     }
 }
