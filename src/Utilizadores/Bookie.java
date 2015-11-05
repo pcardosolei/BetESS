@@ -5,7 +5,7 @@
  */
 package Utilizadores;
 
-import Eventos.Eventos;
+
 import Eventos.Evento;
 
 /**
