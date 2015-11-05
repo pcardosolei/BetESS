@@ -26,10 +26,16 @@ public class Evento {
         equipas = new String[3];
         odds = new float[3];
         estado = false;
+<<<<<<< HEAD
         apostas = new ArrayList<>();
+=======
+        historico = new ArrayList<>();
+>>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
     }
     
     public Evento(String[] equipas, float[] odds, boolean estado){
+      
+        try{
         this.equipas = new String[3];
         this.equipas[0] = equipas[0];
         this.equipas[1] = "Empate";
@@ -39,7 +45,12 @@ public class Evento {
         this.odds[1] = odds[1];
         this.odds[2] = odds[2];
         this.estado = estado;
-    }
+        this.historico = new ArrayList<>();
+        actualizaHistorico(odds);
+        }catch(Exception e){
+            System.out.println("Erro na criação do evento");
+        }
+        }
 
     /**
      * @return the equipas
@@ -67,6 +78,7 @@ public class Evento {
      */
     public void setOdds(float[] odds) {
         this.odds = odds;
+        actualizaHistorico(odds);
     }
 
     /**
@@ -109,17 +121,27 @@ public class Evento {
         
         
         StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
         for( int i = 0; i <= odds.length - 1; i++)
         {
-            result.append( equipas[i] + " " + odds[i] + "|"); 
+            result.append( equipas[i] + " " + odds[i] + " | "); 
         }
-        
-        for(Historico h: historico){
-            result.append(historico.toString());
-        }
-        result.append(NEW_LINE);
+        result.append("\n");
         return result.toString();
+        }
+
+        public String historicoApostas(){
+        StringBuilder result = new StringBuilder();
+        for(Historico h: historico)
+        {
+            result.append(h.toString()); 
+            result.append("\n");
+
+        }
+        return result.toString();
+    }
+        
+    private void actualizaHistorico(float[] odds) {
+        Historico actual = new Historico(odds);
+        historico.add(actual);
         }
 }
