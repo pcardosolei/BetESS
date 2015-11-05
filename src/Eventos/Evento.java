@@ -6,6 +6,8 @@
 package Eventos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import Utilizadores.Aposta;
 
 /**
  *
@@ -18,11 +20,13 @@ public class Evento {
     private boolean estado; //true = aberto
     private int vencedor;
     private ArrayList<Historico> historico;
+    private ArrayList<Aposta> apostas; 
     
     public Evento(){
         equipas = new String[3];
         odds = new float[3];
         estado = false;
+        apostas = new ArrayList<>();
     }
     
     public Evento(String[] equipas, float[] odds, boolean estado){
@@ -91,6 +95,14 @@ public class Evento {
      */
     public void setVencedor(int vencedor) {
         this.vencedor = vencedor;
+    }
+    
+    public void novaAposta(int valor, int opcao){
+        float odd;
+        odd=this.odds[opcao];
+       
+       Aposta newBet = new Aposta(opcao,valor,odd);
+       apostas.add(newBet);
     }
     
     public String toString(){
