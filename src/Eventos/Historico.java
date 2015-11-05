@@ -19,11 +19,25 @@ public class Historico {
 
 
     
-    public Historico(String[] equipas, float[] odds){
+    public Historico(float[] odds){
        this.odds = new float[3];
        GregorianCalendar cal = new GregorianCalendar();
        this.odds[0] = odds[0];
        this.odds[1] = odds[1];
        this.odds[2] = odds[2];
+       data = cal.getTime();
+    }
+    
+    public String toString(){
+        
+        StringBuilder result = new StringBuilder();
+        
+        for( int i = 0; i <= odds.length - 1; i++)
+        {
+            result.append(odds[i] + " | ");     
+        }
+        result.append(" -- " + this.data);
+        result.append("\n");
+        return result.toString();
     }
 }

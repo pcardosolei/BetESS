@@ -42,8 +42,7 @@ public class BetESS {
             
             switch(opcao){
             case 1: criarConta();
-                break;
-                
+                break;               
             case 2: criarEvento();
                 break;
             case 3: listaEventos();
@@ -133,7 +132,7 @@ public class BetESS {
         System.out.println("Evento Criado");
     }
     
-    public static String listaEventos(){
+    public static void listaEventos(){
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
@@ -144,9 +143,20 @@ public class BetESS {
             result.append(eventos.get(evento).toString()); 
         }
         result.append(NEW_LINE);
-        return result.toString();
+        System.out.println(result.toString());
     }
     
+    public static void listaHistoricoEvento(){
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual o evento que pretende procurar informação?");
+        int codigo = in.nextInt();
+        try{
+            eventos.get(codigo).historicoApostas();
+        } catch (NullPointerException e){
+            System.out.println("Evento não existente");
+        }
+    }
     public static void editarOdds(){
         float[] odds = new float[3];
         String[] equipas = new String[3];
