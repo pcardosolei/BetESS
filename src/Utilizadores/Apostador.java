@@ -19,10 +19,15 @@ public class Apostador extends Utilizador {
         disponivel = 0;
     }
     
+    public Apostador(String nome,String mail){
+        super(nome,mail);
+    }
+    
     public Apostador(String nome,String mail, int disponivel){
         super(nome,mail);
         this.disponivel = disponivel;
     }
+    
     
         public int getDisponivel() {
         return disponivel;

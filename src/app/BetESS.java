@@ -6,7 +6,6 @@
 package app;
 
 import Eventos.Evento;
-import Utilizadores.Aposta;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
@@ -32,8 +31,32 @@ public class BetESS {
         bookies = new ArrayList<>();
         apostadores = new HashMap<>();
         
+        carregaDados();
+        menuInicial(); //start app;
+    }
+    
+    public static void menuInicial(){
+        int opcao;
+        Scanner entrada = new Scanner(System.in);
+        do{
+            menu1();
+            
+            opcao = entrada.nextInt();
+            
+            switch(opcao){
+            case 1: criarConta();
+                    menu();
+                    break;               
+            case 2: opcao = 0;
+                    break;
+            default:
+                System.out.println("Opção inválida.");
+            }
+        } while(opcao != 0);
         
-        //start app;
+        
+    }
+    public static void menu2(){
         int opcao;
         Scanner entrada = new Scanner(System.in);
         do{
@@ -55,11 +78,16 @@ public class BetESS {
                 System.out.println("Opção inválida.");
             }
         } while(opcao != 0);
-    }
     
-    
+}
+     public static void menu1(){
+         System.out.println("\n");
+         System.out.println("Registar");
+         System.out.println("Login");
+     }
      public static void menu(){
-        System.out.println("\tBET ESSSS");
+        System.out.println("\n");
+        System.out.println("\tBET ESS");
         System.out.println("Criar Conta");
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
@@ -136,7 +164,7 @@ public class BetESS {
         System.out.println("Evento Criado");
     }
     
-<<<<<<< HEAD
+
     public static String listaApostas(){
     
         StringBuilder result = new StringBuilder();
@@ -146,10 +174,8 @@ public class BetESS {
         return result.toString();
     }
     
-    public static String listaEventos(){
-=======
+
     public static void listaEventos(){
->>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
@@ -196,4 +222,17 @@ public class BetESS {
         }
         
      }
+    
+    private static void carregaDados(){
+        
+        Apostador apostador1 = new Apostador("paulo cardoso","paulo@gmail.com");
+        Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt");
+        apostadores.put(apostadores.size(),apostador1);
+        apostadores.put(apostadores.size(),apostador2);
+        Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com");
+        Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt");
+        bookies.add(bookie1);
+        bookies.add(bookie2);
+        
+    }
 }
