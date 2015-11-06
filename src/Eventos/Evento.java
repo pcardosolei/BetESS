@@ -30,6 +30,8 @@ public class Evento {
         historico = new ArrayList<>();
     }
     
+    
+    
     public Evento(String[] equipas, float[] odds, boolean estado){
       
         try{
@@ -43,6 +45,7 @@ public class Evento {
         this.odds[2] = odds[2];
         this.estado = estado;
         this.historico = new ArrayList<>();
+        this.apostas = new ArrayList<>();
         actualizaHistorico(odds);
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
@@ -106,13 +109,34 @@ public class Evento {
         this.vencedor = vencedor;
     }
     
+    public String betRes(int res)
+    {
+        String nome = equipas[res];
+        return nome;
+    }
+    
     public void novaAposta(int valor, int opcao){
         float odd;
         odd=this.odds[opcao];
+          
        
        Aposta newBet = new Aposta(opcao,valor,odd);
        apostas.add(newBet);
     }
+    public String printBet(){
+        
+        StringBuilder bets= new StringBuilder();
+        
+            bets.append("Apostas:\n");
+        for(Aposta a: apostas)
+            {
+                bets.append(a.toString());
+            }
+            bets.append("-----------------------");
+            bets.append("\n");
+            return bets.toString();
+            }
+    
     
     public String toString(){
         
@@ -121,6 +145,10 @@ public class Evento {
         for( int i = 0; i <= odds.length - 1; i++)
         {
             result.append( equipas[i] + " " + odds[i] + " | "); 
+        }
+        for(Aposta a: apostas)
+        {
+            result.append(a.toString());
         }
         result.append("\n");
         return result.toString();

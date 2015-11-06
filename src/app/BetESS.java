@@ -51,6 +51,8 @@ public class BetESS {
                 break;
             case 5: criarAposta();
                 break;
+            case 6: listaApostas();
+                break;
             default:
                 System.out.println("Opção inválida.");
             }
@@ -65,6 +67,7 @@ public class BetESS {
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
         System.out.println("Criar Aposta");
+        System.out.println("Mostra apostas");
         System.out.println("Opcao:");
     }
     
@@ -99,13 +102,14 @@ public class BetESS {
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
         codigo = in.nextInt();
-        System.out.println("Qual e a sua opcao:");
+        System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
         opcao=in.nextInt();
-        System.out.println("Que valor prentende apostar:");
+        System.out.println("Que valor prentende apostar €:");
         valor=in.nextInt();
       try{
             
           eventos.get(codigo).novaAposta(valor, opcao);
+          System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
           
             
     } catch(Exception e){
@@ -137,13 +141,17 @@ public class BetESS {
     }
     
 
-    public static String listaApostas(){
+    public static void listaApostas(){
     
         StringBuilder result = new StringBuilder();
         String NEW_LINE=System.getProperty("line.separator");
         
+        for(Evento evento:eventos.values()){
+            result.append(evento.printBet());
         
-        return result.toString();
+        }
+        
+        System.out.println(result.toString());
     }
     
    
