@@ -12,26 +12,24 @@ package Utilizadores;
 public class Aposta {
  
     private int valor;
-    private int jogo;
     private int opcao;
-    private int odd;
-    private boolean estado;
+    private float odd;
+    private boolean estado; // true-> aberto
     
     public Aposta(){
         valor = 0;
-        jogo = 0;
         opcao = 0;
         odd = 0;
         estado = false;
     }
     
-    public Aposta(int jogo, int opcao, int valor, int odd){
+    public Aposta(int opcao, int valor, float odd){
         
-        this.jogo = jogo;
+
         this.opcao = opcao;
         this.valor = valor;
         this.odd = odd; 
-        this.estado = estado;
+        this.estado = true;
     }
     
  
@@ -48,20 +46,6 @@ public class Aposta {
      */
     public void setValor(int valor) {
         this.valor = valor;
-    }
-
-    /**
-     * @return the jogo
-     */
-    public int getJogo() {
-        return jogo;
-    }
-
-    /**
-     * @param jogo the jogo to set
-     */
-    public void setJogo(int jogo) {
-        this.jogo = jogo;
     }
 
     /**
@@ -97,7 +81,6 @@ public class Aposta {
                
         StringBuilder result = new StringBuilder();
 
-        result.append(this.jogo+"\n");
         result.append(this.opcao+"\n");
         result.append(this.valor+"\n");
         return result.toString();
@@ -106,7 +89,7 @@ public class Aposta {
     /**
      * @return the odd
      */
-    public int getOdd() {
+    public float getOdd() {
         return odd;
     }
 

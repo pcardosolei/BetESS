@@ -42,8 +42,7 @@ public class BetESS {
             
             switch(opcao){
             case 1: criarConta();
-                break;
-                
+                break;               
             case 2: criarEvento();
                 break;
             case 3: listaEventos();
@@ -51,6 +50,8 @@ public class BetESS {
             case 4: editarOdds();
                 break;
             case 5: criarAposta();
+                break;
+            case 6: listaApostas();
                 break;
             default:
                 System.out.println("Opção inválida.");
@@ -65,6 +66,8 @@ public class BetESS {
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
+        System.out.println("Criar Aposta");
+        System.out.println("Mostra apostas");
         System.out.println("Opcao:");
     }
     
@@ -95,16 +98,20 @@ public class BetESS {
    
    
     public static void criarAposta(){
-        int codigo;
+        int codigo,valor,opcao;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
         codigo = in.nextInt();
+        System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
+        opcao=in.nextInt();
+        System.out.println("Que valor prentende apostar €:");
+        valor=in.nextInt();
       try{
-            System.out.println(eventos.get(codigo).toString());
-            System.out.println("Escolha a Opcao ");
             
+          eventos.get(codigo).novaAposta(valor, opcao);
+          System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
+          
             
-            Aposta aposta = new Aposta();
     } catch(Exception e){
             System.out.println("Não encontrou o evento");
         }
@@ -133,7 +140,23 @@ public class BetESS {
         System.out.println("Evento Criado");
     }
     
-    public static String listaEventos(){
+
+    public static void listaApostas(){
+    
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE=System.getProperty("line.separator");
+        
+        for(Evento evento:eventos.values()){
+            result.append(evento.printBet());
+        
+        }
+        
+        System.out.println(result.toString());
+    }
+    
+   
+
+    public static void listaEventos(){
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
@@ -144,9 +167,20 @@ public class BetESS {
             result.append(eventos.get(evento).toString()); 
         }
         result.append(NEW_LINE);
-        return result.toString();
+        System.out.println(result.toString());
     }
     
+    public static void listaHistoricoEvento(){
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual o evento que pretende procurar informação?");
+        int codigo = in.nextInt();
+        try{
+            eventos.get(codigo).historicoApostas();
+        } catch (NullPointerException e){
+            System.out.println("Evento não existente");
+        }
+    }
     public static void editarOdds(){
         float[] odds = new float[3];
         String[] equipas = new String[3];
