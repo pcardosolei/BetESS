@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,11 +7,11 @@
 package app;
 
 import Eventos.Evento;
-import Utilizadores.Aposta;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -32,12 +33,37 @@ public class BetESS {
         bookies = new ArrayList<>();
         apostadores = new HashMap<>();
         
-        
-        //start app;
+        carregaDados();
+        menu(); //start app;
+    }
+    
+    /*
+    public static void menuInicial(){
         int opcao;
         Scanner entrada = new Scanner(System.in);
         do{
-            menu();
+            menu1();
+            
+            opcao = entrada.nextInt();
+            
+            switch(opcao){
+            case 1: criarConta();
+                    menu();
+                    break;               
+            case 2: opcao = 0;
+                    break;
+            default:
+                System.out.println("Opção inválida.");
+            }
+        } while(opcao != 0);  
+    }
+    */
+    
+    public static void menu(){
+        int opcao;
+        Scanner entrada = new Scanner(System.in);
+        do{
+            DadosMenu();
             opcao = entrada.nextInt();
             
             switch(opcao){
@@ -51,20 +77,27 @@ public class BetESS {
                 break;
             case 5: criarAposta();
                 break;
+            case 6: listaHistoricoEvento();
+                break;
             default:
                 System.out.println("Opção inválida.");
             }
         } while(opcao != 0);
-    }
     
-    
-     public static void menu(){
-        System.out.println("\tBET ESSSS");
+}
+     public static void menu1(){
+         System.out.println("\n");
+         System.out.println("Registar");
+         System.out.println("Login");
+     }
+     public static void DadosMenu(){
+        System.out.println("\tBET ESS");
         System.out.println("Criar Conta");
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
         System.out.println("Criar Aposta");
+        System.out.println("Historico odds de um evento");
         System.out.println("Opcao:");
     }
     
@@ -94,18 +127,19 @@ public class BetESS {
    
    
    
-    public static void criarAposta(){
+   public static void criarAposta(){
         int codigo,valor,opcao;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
         codigo = in.nextInt();
-        System.out.println("Qual e a sua opcao:");
+        System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
         opcao=in.nextInt();
-        System.out.println("Que valor prentende apostar:");
+        System.out.println("Que valor prentende apostar €:");
         valor=in.nextInt();
       try{
             
           eventos.get(codigo).novaAposta(valor, opcao);
+          System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
           
             
     } catch(Exception e){
@@ -113,7 +147,9 @@ public class BetESS {
         }
 
     }
-       //bookie
+   
+
+//bookie
 
     public static void criarEvento(){
         
@@ -124,6 +160,7 @@ public class BetESS {
         equipas[0] = in.nextLine();
         System.out.println("Equipa2");
         equipas[1] = in.nextLine();
+        try{
         System.out.println("Odd Vitoria Equipa1");
         odds[0] = in.nextFloat();
         System.out.println("Odd Empate");
@@ -134,9 +171,12 @@ public class BetESS {
         Evento evento = new Evento(equipas,odds,true);
         eventos.put(eventos.size(),evento);
         System.out.println("Evento Criado");
+        } catch(Exception e){
+            System.out.println("Evento Não Criado . Introduza odds do tipo inteiro,decimal");
+        }
     }
     
-<<<<<<< HEAD
+
     public static String listaApostas(){
     
         StringBuilder result = new StringBuilder();
@@ -146,10 +186,8 @@ public class BetESS {
         return result.toString();
     }
     
-    public static String listaEventos(){
-=======
+
     public static void listaEventos(){
->>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
         
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
@@ -169,7 +207,7 @@ public class BetESS {
         System.out.println("Qual o evento que pretende procurar informação?");
         int codigo = in.nextInt();
         try{
-            eventos.get(codigo).historicoApostas();
+            System.out.println(eventos.get(codigo).historicoApostas());
         } catch (NullPointerException e){
             System.out.println("Evento não existente");
         }
@@ -196,4 +234,17 @@ public class BetESS {
         }
         
      }
+    
+    private static void carregaDados(){
+        
+        Apostador apostador1 = new Apostador("paulo cardoso","paulo@gmail.com");
+        Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt");
+        apostadores.put(apostadores.size(),apostador1);
+        apostadores.put(apostadores.size(),apostador2);
+        Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com");
+        Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt");
+        bookies.add(bookie1);
+        bookies.add(bookie2);
+        
+    }
 }

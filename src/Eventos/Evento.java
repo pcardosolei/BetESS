@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Eventos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import Utilizadores.Aposta;
 
 /**
@@ -26,11 +21,8 @@ public class Evento {
         equipas = new String[3];
         odds = new float[3];
         estado = false;
-<<<<<<< HEAD
         apostas = new ArrayList<>();
-=======
         historico = new ArrayList<>();
->>>>>>> 6fb62d1e241dcbfae7e53859897084da9f05d84e
     }
     
     public Evento(String[] equipas, float[] odds, boolean estado){
@@ -46,11 +38,13 @@ public class Evento {
         this.odds[2] = odds[2];
         this.estado = estado;
         this.historico = new ArrayList<>();
+        this.apostas = new ArrayList<>();
+        this.estado = true;
         actualizaHistorico(odds);
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
         }
-        }
+    }
 
     /**
      * @return the equipas
@@ -109,13 +103,41 @@ public class Evento {
         this.vencedor = vencedor;
     }
     
+    public String betRes(int res)
+    {
+        String nome = equipas[res];
+        return nome;
+    }
+    
+    public void fecharEvento(){
+        this.estado = false;
+        for(Aposta a : apostas){
+            a.setEstado(false);
+        }
+    }
+    
     public void novaAposta(int valor, int opcao){
         float odd;
         odd=this.odds[opcao];
+          
        
        Aposta newBet = new Aposta(opcao,valor,odd);
        apostas.add(newBet);
     }
+    public String printBet(){
+        
+        StringBuilder bets= new StringBuilder();
+        
+            bets.append("Apostas:\n");
+            for(Aposta a: apostas)
+            {
+                bets.append(a.toString());
+            }
+            bets.append("-----------------------");
+            bets.append("\n");
+            return bets.toString();
+            }
+    
     
     public String toString(){
         
@@ -124,6 +146,10 @@ public class Evento {
         for( int i = 0; i <= odds.length - 1; i++)
         {
             result.append( equipas[i] + " " + odds[i] + " | "); 
+        }
+        for(Aposta a: apostas)
+        {
+            result.append(a.toString());
         }
         result.append("\n");
         return result.toString();

@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,10 +20,16 @@ public class Apostador extends Utilizador {
         disponivel = 0;
     }
     
+    public Apostador(String nome,String mail){
+        super(nome,mail);
+        this.disponivel = 0;
+    }
+    
     public Apostador(String nome,String mail, int disponivel){
         super(nome,mail);
         this.disponivel = disponivel;
     }
+    
     
         public int getDisponivel() {
         return disponivel;
@@ -50,3 +57,4 @@ public class Apostador extends Utilizador {
     
     
 }
+
