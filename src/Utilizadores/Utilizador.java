@@ -72,4 +72,18 @@ public abstract class Utilizador {
         result.append(NEW_LINE);
         return result.toString();
         }
+     
+      //EQUALS
+    public boolean equals(Object obj)
+    {
+        boolean iguais = true;
+        
+        if(this == obj) return true;
+        if((obj == null) || (this.getClass() != obj.getClass())) return false;
+        
+        Utilizador c = (Utilizador) obj;
+        
+        return(this.nome.equals(c.getNome())
+                && this.mail.equals(c.getMail()));
+          }
 }

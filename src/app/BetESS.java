@@ -11,7 +11,6 @@ import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -34,34 +33,25 @@ public class BetESS {
         apostadores = new HashMap<>();
         
         carregaDados();
-        menu(); //start app;
-    }
-    
-    /*
-    public static void menuInicial(){
         int opcao;
         Scanner entrada = new Scanner(System.in);
-        do{
-            menu1();
-            
+      
+        /*
+        while(login){
+            dadosLogin();
             opcao = entrada.nextInt();
-            
             switch(opcao){
-            case 1: criarConta();
-                    menu();
+               case 1: criarConta();
                     break;               
-            case 2: opcao = 0;
+                case 2: criarEvento();
                     break;
-            default:
-                System.out.println("Opção inválida.");
-            }
-        } while(opcao != 0);  
-    }
-    */
-    
-    public static void menu(){
-        int opcao;
-        Scanner entrada = new Scanner(System.in);
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+                }
+        }
+          */  
+            
         do{
             DadosMenu();
             opcao = entrada.nextInt();
@@ -83,9 +73,10 @@ public class BetESS {
                 System.out.println("Opção inválida.");
             }
         } while(opcao != 0);
+    }
+     
     
-}
-     public static void menu1(){
+     public static void DadosLogin(){
          System.out.println("\n");
          System.out.println("Registar");
          System.out.println("Login");
