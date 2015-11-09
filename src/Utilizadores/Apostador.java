@@ -5,8 +5,7 @@
  * and open the template in the editor.
  */
 package Utilizadores;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 /**
  *
  * @author PauloCardoso
@@ -55,6 +54,16 @@ public class Apostador extends Utilizador {
             }
         }
     
+    
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if((obj == null) || (this.getClass() != obj.getClass())) return false;
+         
+        Apostador a = (Apostador) obj;
+         
+        return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
+                                
+    }
     
 }
 
