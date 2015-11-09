@@ -17,7 +17,7 @@ import java.util.Scanner;
  *
  * @author PauloCardoso
  */
-public class BetESS {
+public class Sistema {
 
     /**
      * @param args the command line arguments
@@ -35,23 +35,7 @@ public class BetESS {
         carregaDados();
         int opcao;
         Scanner entrada = new Scanner(System.in);
-      
-        /*
-        while(login){
-            dadosLogin();
-            opcao = entrada.nextInt();
-            switch(opcao){
-               case 1: criarConta();
-                    break;               
-                case 2: criarEvento();
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-                    break;
-                }
-        }
-          */  
-            
+   
         do{
             DadosMenu();
             opcao = entrada.nextInt();
