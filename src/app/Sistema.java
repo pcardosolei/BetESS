@@ -9,7 +9,6 @@ package app;
 import Eventos.Evento;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -23,18 +22,22 @@ public class Sistema  {
      * @param args the command line arguments
      */
     private static HashMap<Integer,Apostador> apostadores;
-    private static ArrayList<Bookie> bookies;
+    private static HashMap<Integer,Bookie> bookies;
     private static HashMap<Integer,Evento> eventos;
     private static int login; //apostador ou bookie
     private static boolean flag1;
-    
+    private static int bookie;
+    private static int apostador;
     
     public static void main(String[] args) {
         // TODO code application logic here
         eventos = new HashMap<>();
-        bookies = new ArrayList<>();
+        bookies = new HashMap<>();
         apostadores = new HashMap<>();
         flag1 = true;
+        bookie = -1;
+        apostador = -1;
+        
         carregaDados();
        
         Scanner entrada = new Scanner(System.in);
@@ -160,7 +163,7 @@ public class Sistema  {
                    apostadores.put(apostadores.size(),apostador);
                    break;
            case 2: Bookie bookie = new Bookie(nome,email,password);
-                   bookies.add(bookie);
+                   bookies.put(bookies.size(),bookie);
                    break; 
            default: System.out.println("Introduziu dados errados");
                    break;
@@ -228,16 +231,24 @@ public class Sistema  {
     
     public static boolean verificaApostador(String user, String pw){
         boolean flag = true;
-        for(Apostador a: apostadores.values()){
-            if((a.verificaUtilizador(user, pw))){
+        for(Integer a: apostadores.keySet()){
+            if((apostadores.get(a).verificaUtilizador(user, pw))){
                 flag= false;
+                apostador = a;
             }
         }
         return flag;
     }
     
     public static boolean verificaBookie(String user, String pw){
-        return true;
+         boolean flag = true;
+        for(Integer a: bookies.keySet()){
+            if((bookies.get(a).verificaUtilizador(user, pw))){
+                flag= false;
+                bookie = a;
+            }
+        }
+        return flag;
     }
     
     // mostra a lista de eventos em que o bookie tem interesse
@@ -305,8 +316,8 @@ public class Sistema  {
         apostadores.put(apostadores.size(),apostador2);
         Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com","12341");
         Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt","1231");
-        bookies.add(bookie1);
-        bookies.add(bookie2);
+        bookies.put(bookies.size(),bookie1);
+        bookies.put(bookies.size(),bookie2);
         
     }
 }
