@@ -115,13 +115,12 @@ public class Sistema  {
      Scanner entrada = new Scanner(System.in);
      int opcao = entrada.nextInt();
      String user, pw;
-     boolean flag;
      switch(opcao){
          case 1: System.out.println("Username: ");
                  user = entrada.next();
                  System.out.println("Password: ");
                  pw = entrada.next();    
-                 if(verificaBookie(user,pw)){ 
+                 if(!(verificaBookie(user,pw))){ 
                     login = 1;
                     flag1 = false;
                  }
@@ -130,7 +129,7 @@ public class Sistema  {
                  user = entrada.next();
                  System.out.print("Password: ");
                  pw = entrada.next(); 
-                 if((flag = verificaApostador(user,pw))==true){
+                 if(!(verificaApostador(user,pw))){
                     login = 2;  
                     flag1 = false; 
                  }
@@ -230,7 +229,7 @@ public class Sistema  {
     public static boolean verificaApostador(String user, String pw){
         boolean flag = true;
         for(Apostador a: apostadores.values()){
-            if(!(a.verificaUtilizador(user, pw))){
+            if((a.verificaUtilizador(user, pw))){
                 flag= false;
             }
         }
