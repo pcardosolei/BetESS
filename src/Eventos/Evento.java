@@ -3,6 +3,7 @@ package Eventos;
 
 import java.util.ArrayList;
 import Utilizadores.Aposta;
+import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.Observable;
 
@@ -15,8 +16,8 @@ public class Evento extends Observable {
     private String[] equipas;
     private float[] odds;
     private boolean estado; //true = aberto
-    private int vencedor;
-    private ArrayList<Historico> historico;
+    private int vencedor; //vencedor
+    private ArrayList<Historico> historico; //historico de odds
     private ArrayList<Aposta> apostas; 
     
     public Evento(){
@@ -27,7 +28,7 @@ public class Evento extends Observable {
         historico = new ArrayList<>();
     }
     
-    public Evento(String[] equipas, float[] odds, boolean estado){
+    public Evento(String[] equipas, float[] odds){
       
         try{
         this.equipas = new String[3];
@@ -38,12 +39,10 @@ public class Evento extends Observable {
         this.odds[0] = odds[0];
         this.odds[1] = odds[1];
         this.odds[2] = odds[2];
-        this.estado = estado;
         this.historico = new ArrayList<>();
         this.apostas = new ArrayList<>();
         this.estado = true;
         actualizaHistorico(odds);
-
 
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
@@ -123,14 +122,13 @@ public class Evento extends Observable {
         }
     }
     
-    public void novaAposta(int valor, int opcao){
+    public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];
-          
-       
-       Aposta newBet = new Aposta(opcao,valor,odd);
+       Aposta newBet = new Aposta(opcao,valor,odd,apostador);
        apostas.add(newBet);
     }
+    
     public String printBet(){
         
         StringBuilder bets= new StringBuilder();
@@ -162,7 +160,7 @@ public class Evento extends Observable {
         return result.toString();
         }
 
-        public String historicoApostas(){
+    public String historicoApostas(){
         StringBuilder result = new StringBuilder();
         for(Historico h: historico)
         {
@@ -178,5 +176,11 @@ public class Evento extends Observable {
         historico.add(actual);
         }
 
-    
+    public void setFinalizado(int vencedor){
+        this.vencedor= vencedor;
+        this.estado = false;
+        for(Aposta a: apostas){
+            a.actualizaApostador(vencedor);
+        }
+    }
 }
