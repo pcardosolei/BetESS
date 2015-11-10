@@ -1,11 +1,11 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package Utilizadores;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 /**
  *
  * @author PauloCardoso
@@ -19,10 +19,16 @@ public class Apostador extends Utilizador {
         disponivel = 0;
     }
     
+    public Apostador(String nome,String mail){
+        super(nome,mail);
+        this.disponivel = 0;
+    }
+    
     public Apostador(String nome,String mail, int disponivel){
         super(nome,mail);
         this.disponivel = disponivel;
     }
+    
     
         public int getDisponivel() {
         return disponivel;
@@ -49,4 +55,15 @@ public class Apostador extends Utilizador {
         }
     
     
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if((obj == null) || (this.getClass() != obj.getClass())) return false;
+         
+        Apostador a = (Apostador) obj;
+         
+        return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
+                                
+    }
+    
 }
+

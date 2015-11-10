@@ -1,19 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Eventos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import Utilizadores.Aposta;
+import Utilizadores.Bookie;
+import java.util.Observable;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Evento {
+public class Evento extends Observable {
     
     private String[] equipas;
     private float[] odds;
@@ -30,8 +27,6 @@ public class Evento {
         historico = new ArrayList<>();
     }
     
-    
-    
     public Evento(String[] equipas, float[] odds, boolean estado){
       
         try{
@@ -46,11 +41,15 @@ public class Evento {
         this.estado = estado;
         this.historico = new ArrayList<>();
         this.apostas = new ArrayList<>();
+        this.estado = true;
         actualizaHistorico(odds);
+
+
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
         }
-        }
+       
+    }
 
     /**
      * @return the equipas
@@ -79,6 +78,8 @@ public class Evento {
     public void setOdds(float[] odds) {
         this.odds = odds;
         actualizaHistorico(odds);
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -115,6 +116,13 @@ public class Evento {
         return nome;
     }
     
+    public void fecharEvento(){
+        this.estado = false;
+        for(Aposta a : apostas){
+            a.setEstado(false);
+        }
+    }
+    
     public void novaAposta(int valor, int opcao){
         float odd;
         odd=this.odds[opcao];
@@ -128,7 +136,7 @@ public class Evento {
         StringBuilder bets= new StringBuilder();
         
             bets.append("Apostas:\n");
-        for(Aposta a: apostas)
+            for(Aposta a: apostas)
             {
                 bets.append(a.toString());
             }
@@ -169,4 +177,6 @@ public class Evento {
         Historico actual = new Historico(odds);
         historico.add(actual);
         }
+
+    
 }
