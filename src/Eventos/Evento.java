@@ -3,12 +3,14 @@ package Eventos;
 
 import java.util.ArrayList;
 import Utilizadores.Aposta;
+import Utilizadores.Bookie;
+import java.util.Observable;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Evento {
+public class Evento extends Observable {
     
     private String[] equipas;
     private float[] odds;
@@ -41,9 +43,12 @@ public class Evento {
         this.apostas = new ArrayList<>();
         this.estado = true;
         actualizaHistorico(odds);
+
+
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
         }
+       
     }
 
     /**
@@ -73,6 +78,8 @@ public class Evento {
     public void setOdds(float[] odds) {
         this.odds = odds;
         actualizaHistorico(odds);
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -170,4 +177,6 @@ public class Evento {
         Historico actual = new Historico(odds);
         historico.add(actual);
         }
+
+    
 }

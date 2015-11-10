@@ -11,13 +11,15 @@ import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Sistema {
+public class Sistema implements Observer{
 
     /**
      * @param args the command line arguments
@@ -26,11 +28,13 @@ public class Sistema {
     private static ArrayList<Bookie> bookies;
     private static HashMap<Integer,Evento> eventos;
     
+    
     public static void main(String[] args) {
         // TODO code application logic here
         eventos = new HashMap<>();
         bookies = new ArrayList<>();
         apostadores = new HashMap<>();
+        
         
         carregaDados();
         int opcao;
@@ -142,10 +146,10 @@ public class Sistema {
         odds[1] = in.nextFloat();
         System.out.println("Odd Vitoria Equipa2");
         odds[2] = in.nextFloat();
-                     
         Evento evento = new Evento(equipas,odds,true);
+        Bookie bookie = bookies.get(1);
+        evento.addObserver(bookie);
         eventos.put(eventos.size(),evento);
-        System.out.println("Evento Criado");
         } catch(Exception e){
             System.out.println("Evento Não Criado . Introduza odds do tipo inteiro,decimal");
         }
@@ -221,5 +225,10 @@ public class Sistema {
         bookies.add(bookie1);
         bookies.add(bookie2);
         
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
