@@ -12,7 +12,7 @@ package Utilizadores;
  */
 public class Apostador extends Utilizador {
     
-    private int disponivel; 
+    private float disponivel; 
     
     public Apostador(){
         super();
@@ -30,22 +30,22 @@ public class Apostador extends Utilizador {
     }
     
     
-        public int getDisponivel() {
+        public float getDisponivel() {
         return disponivel;
     }
 
     /**
      * @param disponivel the disponivel to set
      */
-    public void setDisponivel(int disponivel) {
+    public void setDisponivel(float disponivel) {
         this.disponivel = disponivel;
     }
     
-    public void Deposito(int valor){
+    public void Deposito(float valor){
         this.disponivel += valor;
     }
     
-    public void Levantamento(int valor){
+    public void Levantamento(float valor){
         if(valor > disponivel){
           System.out.println("não possui fundos.");  
         }
@@ -53,6 +53,10 @@ public class Apostador extends Utilizador {
         this.disponivel -= valor;
             }
         }
+    
+    public void actualizaDisponivel(float valor){
+        setDisponivel(this.disponivel + valor);   
+    }
     
     public boolean verificaUtilizador(String nome,String password){
         return super.verificaUtilizador(nome, password);
