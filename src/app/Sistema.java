@@ -27,6 +27,8 @@ public class Sistema implements Observer{
     private static HashMap<Integer,Apostador> apostadores;
     private static ArrayList<Bookie> bookies;
     private static HashMap<Integer,Evento> eventos;
+    private static int login; //apostador ou bookie
+    private static boolean flag1;
     
     
     public static void main(String[] args) {
@@ -34,53 +36,86 @@ public class Sistema implements Observer{
         eventos = new HashMap<>();
         bookies = new ArrayList<>();
         apostadores = new HashMap<>();
-        
-        
+        flag1 = true;
         carregaDados();
-        int opcao;
+       
         Scanner entrada = new Scanner(System.in);
-   
+        int opcao; //opcao scanner      
+        
         do{
-            DadosMenu();
+            System.out.println("1 - Registar");
+            System.out.println("2 - Login");
+            System.out.println("0 - Sair");
             opcao = entrada.nextInt();
-            
             switch(opcao){
-            case 1: criarConta();
-                break;               
-            case 2: criarEvento();
-                break;
-            case 3: listaEventos();
-                break;
-            case 4: editarOdds();
-                break;
-            case 5: criarAposta();
-                break;
-            case 6: listaHistoricoEvento();
-                break;
-            default:
-                System.out.println("Opção inválida.");
+                case 1: criarConta();
+                    break;
+                case 2: Login();
+                    break;
             }
-        } while(opcao != 0);
+         } while(flag1 == true);
+        
+        if(login==1){ //bookie
+            do{
+                DadosMenuBookie();
+                opcao = entrada.nextInt();    
+                switch(opcao){           
+                case 1: criarEvento();
+                    break;
+                case 2: listaEventos();
+                    break;
+                case 3: editarOdds();
+                    break;
+                case 4: listaHistoricoEvento();
+                    break;
+                case 5: //mostrarInteresse();
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                }
+            } while(opcao != 0);
+        } else
+        if(login==2){
+            do{
+                DadosMenuBookie();
+                opcao = entrada.nextInt();
+                switch(opcao){        
+                case 2: listaEventos();
+                    break;
+                case 3: criarAposta();
+                    break;
+                case 5: //verEstadoAposta();
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                }
+            } while(opcao != 0);
+        }
     }
-     
     
-     public static void DadosLogin(){
-         System.out.println("\n");
-         System.out.println("Registar");
-         System.out.println("Login");
-     }
-     public static void DadosMenu(){
+
+    public static void DadosMenuBookie(){
         System.out.println("\tBET ESS");
-        System.out.println("Criar Conta");
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
-        System.out.println("Criar Aposta");
         System.out.println("Historico odds de um evento");
-        System.out.println("Opcao:");
+        System.out.println("Mostrar Interesse em Evento");
+        System.out.print("Opcao:");
     }
     
+    public static void DadosMenuApostador(){
+        System.out.println("\tBET ESS");
+        System.out.println("Mostrar Eventos");
+        System.out.println("Apostar em Evento");
+        System.out.print("Opcao:");
+    }
     
+   public static void Login(){
+     login = 1;
+     flag1 = false;
+   }
+   
    public static void criarConta(){
        Scanner entrada = new Scanner(System.in);
        String nome;
