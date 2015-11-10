@@ -11,15 +11,13 @@ import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Sistema implements Observer{
+public class Sistema  {
 
     /**
      * @param args the command line arguments
@@ -40,9 +38,9 @@ public class Sistema implements Observer{
         carregaDados();
        
         Scanner entrada = new Scanner(System.in);
-        int opcao; //opcao scanner      
+        int opcao = -1; //opcao scanner      
         
-        do{
+        while(flag1 == true){
             System.out.println("1 - Registar");
             System.out.println("2 - Login");
             System.out.println("0 - Sair");
@@ -52,9 +50,10 @@ public class Sistema implements Observer{
                     break;
                 case 2: Login();
                     break;
+                default: flag1 = false;
+                    break;
             }
-         } while(flag1 == true);
-        
+        }
         if(login==1){ //bookie
             do{
                 DadosMenuBookie();
@@ -74,17 +73,16 @@ public class Sistema implements Observer{
                     System.out.println("Opção inválida.");
                 }
             } while(opcao != 0);
-        } else
-        if(login==2){
+        } else if(login==2){
             do{
-                DadosMenuBookie();
+                DadosMenuApostador();
                 opcao = entrada.nextInt();
                 switch(opcao){        
-                case 2: listaEventos();
+                case 1: listaEventos();
                     break;
-                case 3: criarAposta();
+                case 2: criarAposta();
                     break;
-                case 5: //verEstadoAposta();
+                case 3: //verEstadoAposta();
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -112,14 +110,42 @@ public class Sistema implements Observer{
     }
     
    public static void Login(){
-     login = 1;
-     flag1 = false;
+     try{
+     System.out.println("-- Bookie 1 | Apostador 2");
+     Scanner entrada = new Scanner(System.in);
+     int opcao = entrada.nextInt();
+     String user, pw;
+     switch(opcao){
+         case 1: System.out.println("Username: ");
+                 user = entrada.next();
+                 System.out.println("Password: ");
+                 pw = entrada.next();    
+                 if(!(verificaBookie(user,pw))){ 
+                    login = 1;
+                    flag1 = false;
+                 }
+                 break;
+         case 2: System.out.print("Username: ");
+                 user = entrada.next();
+                 System.out.print("Password: ");
+                 pw = entrada.next(); 
+                 if(!(verificaApostador(user,pw))){
+                    login = 2;  
+                    flag1 = false; 
+                 }
+                 break;
+        }
+    
+     } catch(Exception e){
+         System.out.println(e);
+     } 
    }
    
    public static void criarConta(){
        Scanner entrada = new Scanner(System.in);
        String nome;
        String email;
+       String password;
        int opcao;
        System.out.println("Introduza o seu nome");
        nome = entrada.nextLine();
@@ -127,11 +153,13 @@ public class Sistema implements Observer{
        email = entrada.nextLine();
        System.out.println("Quer ser apostador(1) ou bookie (2)?");
        opcao = entrada.nextInt();
+       System.out.println("Password");
+       password = entrada.nextLine();
        switch(opcao){
-           case 1: Apostador apostador = new Apostador(nome,email,0);
+           case 1: Apostador apostador = new Apostador(nome,email,password,0);
                    apostadores.put(apostadores.size(),apostador);
                    break;
-           case 2: Bookie bookie = new Bookie(nome,email);
+           case 2: Bookie bookie = new Bookie(nome,email,password);
                    bookies.add(bookie);
                    break; 
            default: System.out.println("Introduziu dados errados");
@@ -194,13 +222,23 @@ public class Sistema implements Observer{
     public static String listaApostas(){
     
         StringBuilder result = new StringBuilder();
-        String NEW_LINE=System.getProperty("line.separator");
-        
-        
+        String NEW_LINE=System.getProperty("line.separator");  
         return result.toString();
     }
     
-
+    public static boolean verificaApostador(String user, String pw){
+        boolean flag = true;
+        for(Apostador a: apostadores.values()){
+            if((a.verificaUtilizador(user, pw))){
+                flag= false;
+            }
+        }
+        return flag;
+    }
+    
+    public static boolean verificaBookie(String user, String pw){
+        return true;
+    }
     public static void listaEventos(){
         
         StringBuilder result = new StringBuilder();
@@ -251,19 +289,14 @@ public class Sistema implements Observer{
     
     private static void carregaDados(){
         
-        Apostador apostador1 = new Apostador("paulo cardoso","paulo@gmail.com");
-        Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt");
+        Apostador apostador1 = new Apostador("paulo","paulo@gmail.com","123");
+        Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt","231");
         apostadores.put(apostadores.size(),apostador1);
         apostadores.put(apostadores.size(),apostador2);
-        Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com");
-        Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt");
+        Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com","12341");
+        Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt","1231");
         bookies.add(bookie1);
         bookies.add(bookie2);
         
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

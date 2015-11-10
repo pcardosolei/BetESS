@@ -19,13 +19,13 @@ public class Apostador extends Utilizador {
         disponivel = 0;
     }
     
-    public Apostador(String nome,String mail){
-        super(nome,mail);
+    public Apostador(String nome,String mail,String password){
+        super(nome,mail,password);
         this.disponivel = 0;
     }
     
-    public Apostador(String nome,String mail, int disponivel){
-        super(nome,mail);
+    public Apostador(String nome,String mail,String password, int disponivel){
+        super(nome,mail,password);
         this.disponivel = disponivel;
     }
     
@@ -54,6 +54,9 @@ public class Apostador extends Utilizador {
             }
         }
     
+    public boolean verificaUtilizador(String nome,String password){
+        return super.verificaUtilizador(nome, password);
+    }
     
     public boolean equals(Object obj){
         if(this == obj) return true;
