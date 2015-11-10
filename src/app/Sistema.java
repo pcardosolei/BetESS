@@ -239,6 +239,16 @@ public class Sistema  {
     public static boolean verificaBookie(String user, String pw){
         return true;
     }
+    
+    // mostra a lista de eventos em que o bookie tem interesse
+    public static void listaEventosInteresse(){
+    
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
+        ArrayList<Evento> novaLista;
+    
+    }
     public static void listaEventos(){
         
         StringBuilder result = new StringBuilder();

@@ -18,6 +18,8 @@ public class Evento extends Observable {
     private int vencedor;
     private ArrayList<Historico> historico;
     private ArrayList<Aposta> apostas; 
+    private ArrayList<Bookie> bookieInteressados;
+    private ArrayList<Observers> listaObservadores;
     
     public Evento(){
         equipas = new String[3];
@@ -72,6 +74,16 @@ public class Evento extends Observable {
         return odds;
     }
 
+    // adicionar ookie interessado
+    public void addInteresse(Bookie b){
+        bookieInteressados.add(b);
+    }
+    
+    // verifica se o bookie esta interessado neste evento
+    public boolean interessadoEvento(Bookie b){
+        
+        return(bookieInteressados.contains(b));
+    }
     /**
      * @param odds the odds to set
      */
