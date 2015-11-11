@@ -77,7 +77,8 @@ public class Apostador extends Utilizador implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        
+        if(o!=null)
+            System.out.println("CENAS 1");
         
     }
     

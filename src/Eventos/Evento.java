@@ -216,10 +216,7 @@ public class Evento extends Observable {
         observers.add(o);
     }
     
-    @Override
-    public void removeObserver(Observer o){
-        observers.remove(o);
-    }
+ 
     
     @Override
     public void notifyObservers(){   
