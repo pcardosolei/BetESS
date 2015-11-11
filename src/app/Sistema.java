@@ -125,7 +125,7 @@ public class Sistema  {
         System.out.println("3-Ver Estado Apostas em Evento");
         System.out.println("4-Deposito");
         System.out.println("5-Levantamento");
-        System.out.print("Opcao:");
+        System.out.print("Opcao: ");
     }
     
    public static void menuInicial(){
@@ -220,10 +220,14 @@ public class Sistema  {
         System.out.println("Que valor prentende apostar €:");
         valor=in.nextInt();
       try{          
+          if(apostadores.get(apostador).testaSaldo(valor)){
           eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));
           eventos.get(codigo).addObserver(apostadores.get(apostador));
           System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
-          
+          }
+          else {
+              System.out.println("Está sem graveto");
+          }
         } catch(Exception e){
             System.out.println("Não encontrou o evento");
         }
@@ -415,5 +419,7 @@ public class Sistema  {
         eventos.get(1).novaAposta(20, 0, apostador2);
         eventos.get(0).novaAposta(10,2,apostador2);
         eventos.get(0).novaAposta(200,0, apostador1);
+        eventos.get(0).addObserver(bookie2);
+        eventos.get(0).addObserver(apostador2);
     }
 }

@@ -57,6 +57,13 @@ public class Apostador extends Utilizador implements Observer {
             }
         }
     
+    public boolean testaSaldo(float valor){
+        if(valor > disponivel)
+            return false;
+        else
+            return true;
+    }
+    
     public void actualizaDisponivel(float valor){
         setDisponivel(this.disponivel + valor);   
     }
@@ -77,8 +84,9 @@ public class Apostador extends Utilizador implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        float valor =(float) arg;
         if(o!=null)
-            System.out.println("CENAS 1");
+            System.out.println("Foi encerrado um evento e ganhou " + valor);
         
     }
     
