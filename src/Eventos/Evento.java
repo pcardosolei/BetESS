@@ -126,7 +126,7 @@ public class Evento extends Observable {
     public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];
-       Aposta newBet = new Aposta(opcao,valor,odd,apostador);
+        Aposta newBet = new Aposta(opcao,valor,odd,apostador);
         getApostas().add(newBet);
     }
     
@@ -211,9 +211,9 @@ public class Evento extends Observable {
     
     
     @Override 
-    public void addObserver(Observer o){
-        
+    public void addObserver(Observer o){  
         observers.add(o);
+        
     }
     
  
@@ -221,7 +221,21 @@ public class Evento extends Observable {
     @Override
     public void notifyObservers(){   
         for(Observer o: observers){
-            o.update(this, o);
+            if(o.getClass().getName().equals("Utilizadores.Bookie"))
+            o.update(this, apostas);
+            else
+            {
+            Apostador actual =(Apostador) o;
+            float soma = 0;
+            for(Aposta a: apostas){
+                if(a.getApostador().equals(actual)){
+                    if(a.getOpcao()==vencedor){
+                        soma += a.getValor() * a.getOdd();
+                    }
+                }
+            }
+            o.update(this,soma);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@
 package Utilizadores;
 
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,8 +30,15 @@ public class Bookie extends Utilizador implements Observer {
     
     @Override
     public void update(Observable o, Object arg) {
-        if(o!=null)
-            System.out.println("cenas");
+        ArrayList<Aposta> apostas =(ArrayList<Aposta>) arg;
+        int soma = 0;
+        if(o!=null){
+             for(Aposta a: apostas){
+                 soma += a.getValor();
+             }
+             System.out.println("Foram apostados " + soma + "€");
+        }
+            
     }
 
 }
