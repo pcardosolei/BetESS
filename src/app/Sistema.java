@@ -15,8 +15,12 @@ import java.util.Scanner;
 
 /**
  *
- * @author PauloCardoso
+ * @author PauloCardoso 
+ * @author LuisBrito
  */
+
+
+// falta meter depositos e levantamentos
 public class Sistema  {
 
     /**
@@ -54,8 +58,7 @@ public class Sistema  {
                     break;
                 case 2: Login(); //certo
                     break;
-                default: flag1 = false;
-                    break;
+                default: break;
             }
         }
         if(login==1){ //bookie
@@ -71,7 +74,7 @@ public class Sistema  {
                     break;
                 case 4: listaHistoricoEvento();
                     break;
-                case 5: //mostrarInteresse();
+                case 5: mostrarInteresse();
                     break;
                 case 6: listaApostas();
                     break;
@@ -103,7 +106,7 @@ public class Sistema  {
    }
 
     public static void DadosMenuBookie(){
-        System.out.println("\tBET ESS");
+        System.out.println("\n\tBET ESS");
         System.out.println("Criar Evento");
         System.out.println("Mostrar Eventos");
         System.out.println("Editar Odds");
@@ -115,7 +118,7 @@ public class Sistema  {
     }
     
     public static void DadosMenuApostador(){
-        System.out.println("\tBET ESS");
+        System.out.println("\n\tBET ESS");
         System.out.println("Mostrar Eventos");
         System.out.println("Apostar em Evento");
         System.out.print("Opcao:");
@@ -128,9 +131,9 @@ public class Sistema  {
      try{
      int opcao = Integer.parseInt(entrada.nextLine());
      switch(opcao){
-         case 1: System.out.println("Username: ");
+         case 1: System.out.print("Username: ");
                  user = entrada.nextLine();
-                 System.out.println("Password: ");
+                 System.out.print("Password: ");
                  pw = entrada.nextLine();    
                  if(!(verificaBookie(user,pw))){ 
                     login = 1;
@@ -180,7 +183,7 @@ public class Sistema  {
    }
    
    
-   
+   //apostador
    public static void criarAposta(){
         int codigo,valor,opcao;
         Scanner in = new Scanner(System.in);
@@ -199,8 +202,9 @@ public class Sistema  {
         }
 
     }
+   
+   
 //bookie
-
     public static void criarEvento(){
         
         String[] equipas = new String[2];
@@ -226,6 +230,16 @@ public class Sistema  {
         }
     }
     
+    public static void mostrarInteresse(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual é o Evento?");
+        try{
+            int codigo = Integer.parseInt(in.nextLine());
+            eventos.get(codigo).addObserver(bookies.get(bookielogado));  
+        } catch(InputMismatchException e){
+            System.out.println("Não encontrou o evento");
+        }
+    }
     public static void finalizarEvento(){
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");

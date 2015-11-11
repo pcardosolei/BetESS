@@ -182,5 +182,7 @@ public class Evento extends Observable {
         for(Aposta a: apostas){
             a.actualizaApostador(vencedor);
         }
+        setChanged();
+        notifyObservers();
     }
 }
