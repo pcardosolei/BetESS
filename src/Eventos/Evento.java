@@ -118,7 +118,7 @@ public class Evento extends Observable {
     
     public void fecharEvento(){
         this.estado = false;
-        for(Aposta a : apostas){
+        for(Aposta a : getApostas()){
             a.setEstado(false);
         }
     }
@@ -127,7 +127,7 @@ public class Evento extends Observable {
         float odd;
         odd=this.odds[opcao];
        Aposta newBet = new Aposta(opcao,valor,odd,apostador);
-       apostas.add(newBet);
+        getApostas().add(newBet);
     }
     
     public String printBet(){
@@ -135,7 +135,7 @@ public class Evento extends Observable {
         StringBuilder bets= new StringBuilder();
         
             bets.append("Apostas:\n");
-            for(Aposta a: apostas)
+            for(Aposta a: getApostas())
             {
                 bets.append(a.toString());
             }
@@ -153,7 +153,7 @@ public class Evento extends Observable {
         {
             result.append( equipas[i] + " " + odds[i] + " | "); 
         }
-        for(Aposta a: apostas)
+        for(Aposta a: getApostas())
         {
             result.append(a.toString());
         }
@@ -182,9 +182,27 @@ public class Evento extends Observable {
     public void setFinalizado(int vencedor){
         this.vencedor= vencedor;
         this.estado = false;
-        for(Aposta a: apostas){
+        for(Aposta a: getApostas()){
             a.actualizaApostador(vencedor);
         }
+        setChanged();
+        notifyObservers();
+    }
+
+    /**
+     * @return the apostas
+     */
+    public ArrayList<Aposta> getApostas() {
+        return apostas;
+    }
+    
+    public ArrayList<Aposta> apostasApostador(Apostador apostador){
+        ArrayList<Aposta> aux = new ArrayList<>();
+         for(Aposta a: apostas){
+                if(a.getApostador().equals(apostador))
+                    aux.add(a);
+            }
+        return aux;
     }
     
     
