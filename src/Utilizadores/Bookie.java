@@ -5,7 +5,7 @@
  */
 package Utilizadores;
 
-import Eventos.Evento;
+
 import java.util.Observable;
 import java.util.Observer;
 

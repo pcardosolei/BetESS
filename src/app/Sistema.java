@@ -212,11 +212,11 @@ public class Sistema  {
         equipas[1] = in.nextLine();
         try{
         System.out.println("Odd Vitoria Equipa1");
-        odds[0] = in.nextFloat();
+        odds[0] = Float.parseFloat(in.nextLine());
         System.out.println("Odd Empate");
-        odds[1] = in.nextFloat();
+        odds[1] = Float.parseFloat(in.nextLine());
         System.out.println("Odd Vitoria Equipa2");
-        odds[2] = in.nextFloat();
+        odds[2] = Float.parseFloat(in.nextLine());
         Evento evento = new Evento(equipas,odds);
         Bookie bookie = bookies.get(bookielogado);
         evento.addObserver(bookie);

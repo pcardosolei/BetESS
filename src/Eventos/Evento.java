@@ -4,8 +4,8 @@ package Eventos;
 import java.util.ArrayList;
 import Utilizadores.Aposta;
 import Utilizadores.Apostador;
-import Utilizadores.Bookie;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
@@ -19,6 +19,7 @@ public class Evento extends Observable {
     private int vencedor; //vencedor
     private ArrayList<Historico> historico; //historico de odds
     private ArrayList<Aposta> apostas; 
+    private ArrayList<Observer> observers;
     
     public Evento(){
         equipas = new String[3];
@@ -26,6 +27,7 @@ public class Evento extends Observable {
         estado = false;
         apostas = new ArrayList<>();
         historico = new ArrayList<>();
+        observers = new ArrayList<>();
     }
     
     public Evento(String[] equipas, float[] odds){
@@ -42,6 +44,7 @@ public class Evento extends Observable {
         this.historico = new ArrayList<>();
         this.apostas = new ArrayList<>();
         this.estado = true;
+        observers = new ArrayList<>();
         actualizaHistorico(odds);
 
         }catch(Exception e){
@@ -77,8 +80,6 @@ public class Evento extends Observable {
     public void setOdds(float[] odds) {
         this.odds = odds;
         actualizaHistorico(odds);
-        setChanged();
-        notifyObservers();
     }
 
     /**
@@ -174,6 +175,8 @@ public class Evento extends Observable {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
+        setChanged();
+        notifyObservers();
         }
 
     public void setFinalizado(int vencedor){
@@ -181,6 +184,21 @@ public class Evento extends Observable {
         this.estado = false;
         for(Aposta a: apostas){
             a.actualizaApostador(vencedor);
+        }
+    }
+    
+    
+    @Override 
+    public void addObserver(Observer o){
+        
+        observers.add(o);
+    }
+    
+    @Override
+    public void notifyObservers(){
+        
+        for(Observer o: observers){
+            o.update(this, o);
         }
     }
 }
