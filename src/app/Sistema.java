@@ -41,8 +41,95 @@ public class Sistema  {
         carregaDados();
        
         Scanner entrada = new Scanner(System.in);
+<<<<<<< HEAD
         int opcao = -1; //opcao scanner      
         
+=======
+        int opcao = -1; //opcao scanner 
+        while(opcao!=2){
+            System.out.println("1-Entrar na aplicação");
+            System.out.println("2-Sair da aplicação");
+            opcao = entrada.nextInt();
+            if(opcao == 1){
+                menuInicial();
+            }
+            if(login==1){ //bookie
+                do{
+                    DadosMenuBookie();
+                    opcao = entrada.nextInt();    
+                    switch(opcao){           
+                    case 1: criarEvento();
+                        break;
+                    case 2: listaEventos();
+                        break;
+                    case 3: editarOdds();
+                        break;
+                    case 4: listaHistoricoEvento();
+                        break;
+                    case 5: mostrarInteresse();
+                        break;
+                    case 6: listaApostas();
+                        break;
+                    case 7: finalizarEvento();
+                        break;
+                    default:
+                        break;
+                    }
+                } while(opcao != 0);
+                login = -1;
+                flag1 = true;
+            } else if(login==2){
+                do{
+                    DadosMenuApostador();
+                    opcao = entrada.nextInt();
+                    switch(opcao){        
+                    case 1: listaEventos();
+                        break;
+                    case 2: criarAposta();
+                        break;
+                    case 3: verEstadoApostasEvento();
+                        break;
+                    case 4: depositar();
+                        break;
+                    case 5: levantar();
+                        break;
+                    default:
+                        break;
+                    }
+                } while(opcao != 0);
+                login = -1;
+                flag1 = true;
+           }
+        } 
+   }
+
+    public static void DadosMenuBookie(){
+        System.out.println("\n\tBET ESS");
+        System.out.println("1-Criar Evento");
+        System.out.println("2-Mostrar Eventos");
+        System.out.println("3-Editar Odds");
+        System.out.println("4-Historico odds de um evento");
+        System.out.println("5-Mostrar Interesse em Evento");
+        System.out.println("6-Mostrar Lista de Apostas de Evento");
+        System.out.println("7-Finalizar Evento");
+        System.out.print("Opcao:");
+    }
+    
+    public static void DadosMenuApostador(){
+        System.out.println("\n\tBET ESS");
+        System.out.println("1-Mostrar Eventos");
+        System.out.println("2-Apostar em Evento");
+        System.out.println("3-Ver Estado Apostas em Evento");
+        System.out.println("4-Deposito");
+        System.out.println("5-Levantamento");
+        System.out.print("Opcao: ");
+    }
+    
+   public static void menuInicial(){
+       Scanner entrada = new Scanner(System.in);
+        int opcao; //opcao scanner      
+        try{
+>>>>>>> refs/remotes/origin/cardoso-historico
         while(flag1 == true){
             System.out.println("1 - Registar");
             System.out.println("2 - Login");
