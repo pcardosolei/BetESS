@@ -132,16 +132,16 @@ public class Evento extends Observable {
     
     public String printBet(){
         
-        StringBuilder bets= new StringBuilder();
+        StringBuilder result = new StringBuilder();
         
-            bets.append("Apostas:\n");
+            result.append("\n Apostas \n");
             for(Aposta a: getApostas())
-            {
-                bets.append(a.toString());
+            {   
+                int opcao = a.getOpcao();
+                int valor = a.getValor();
+                result.append(equipas[opcao] + " - " + valor + "€\n");
             }
-            bets.append("-----------------------");
-            bets.append("\n");
-            return bets.toString();
+            return result.toString();
             }
     
     
@@ -151,18 +151,18 @@ public class Evento extends Observable {
         StringBuilder result = new StringBuilder();
         for( int i = 0; i <= odds.length - 1; i++)
         {
-            result.append( equipas[i] + " " + odds[i] + " | "); 
+            result.append(" | " + equipas[i] + " " + odds[i] + " | "); 
         }
-        for(Aposta a: getApostas())
-        {
-            result.append(a.toString());
-        }
-        result.append("\n");
-        return result.toString();
+        if(this.estado)
+            result.append("Evento aberto");
+        else
+            result.append("Evento finalizado");
+       return result.toString();
         }
 
-    public String historicoApostas(){
+    public String historicoOdds(){
         StringBuilder result = new StringBuilder();
+        result.append("\n");
         for(Historico h: historico)
         {
             result.append(h.toString()); 
@@ -180,6 +180,7 @@ public class Evento extends Observable {
         }
 
     public void setFinalizado(int vencedor){
+        if(this.estado){
         this.vencedor= vencedor;
         this.estado = false;
         for(Aposta a: getApostas()){
@@ -187,6 +188,9 @@ public class Evento extends Observable {
         }
         setChanged();
         notifyObservers();
+        } else {
+            System.out.println("Erro já se encontra finalizado");
+        }
     }
 
     /**
@@ -213,8 +217,12 @@ public class Evento extends Observable {
     }
     
     @Override
-    public void notifyObservers(){
-        
+    public void removeObserver(Observer o){
+        observers.remove(o);
+    }
+    
+    @Override
+    public void notifyObservers(){   
         for(Observer o: observers){
             o.update(this, o);
         }

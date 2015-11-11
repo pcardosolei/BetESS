@@ -115,23 +115,23 @@ public class Sistema  {
 
     public static void DadosMenuBookie(){
         System.out.println("\n\tBET ESS");
-        System.out.println("Criar Evento");
-        System.out.println("Mostrar Eventos");
-        System.out.println("Editar Odds");
-        System.out.println("Historico odds de um evento");
-        System.out.println("Mostrar Interesse em Evento");
-        System.out.println("Mostrar Lista de Apostas de Evento");
-        System.out.println("Finalizar Evento");
+        System.out.println("1-Criar Evento");
+        System.out.println("2-Mostrar Eventos");
+        System.out.println("3-Editar Odds");
+        System.out.println("4-Historico odds de um evento");
+        System.out.println("5-Mostrar Interesse em Evento");
+        System.out.println("6-Mostrar Lista de Apostas de Evento");
+        System.out.println("7-Finalizar Evento");
         System.out.print("Opcao:");
     }
     
     public static void DadosMenuApostador(){
         System.out.println("\n\tBET ESS");
-        System.out.println("Mostrar Eventos");
-        System.out.println("Apostar em Evento");
-        System.out.println("Ver Estado Apostas em Evento");
-        System.out.println("Deposito");
-        System.out.println("Levantamento");
+        System.out.println("1-Mostrar Eventos");
+        System.out.println("2-Apostar em Evento");
+        System.out.println("3-Ver Estado Apostas em Evento");
+        System.out.println("4-Deposito");
+        System.out.println("5-Levantamento");
         System.out.print("Opcao:");
     }
     
@@ -162,7 +162,7 @@ public class Sistema  {
                  break;
             }
         } catch (NumberFormatException e) {
-         e.printStackTrace();
+         System.out.println("erro na leitura de dados");
         }
     } 
    
@@ -206,6 +206,7 @@ public class Sistema  {
         valor=in.nextInt();
       try{          
           eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));
+          eventos.get(codigo).addObserver(apostadores.get(apostador));
           System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
           
         } catch(Exception e){
@@ -269,7 +270,7 @@ public class Sistema  {
             int codigo = Integer.parseInt(in.nextLine());
             System.out.println(eventos.get(codigo).toString());
             System.out.println("Vencedor?");
-            int vencedor = in.nextInt();
+            int vencedor = Integer.parseInt(in.nextLine());
             eventos.get(codigo).setFinalizado(vencedor);
         } catch(NullPointerException e){
             System.out.println("Evento não encontrado");
@@ -330,14 +331,12 @@ public class Sistema  {
     public static void listaEventos(){
         
         StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
 
         for(Integer evento: eventos.keySet())
         {
-            result.append("EVENTO " + evento + NEW_LINE);
+            result.append("\nEVENTO " + evento + ": ");
             result.append(eventos.get(evento).toString()); 
         }
-        result.append(NEW_LINE);
         System.out.println(result.toString());
     }
     
@@ -347,7 +346,7 @@ public class Sistema  {
         System.out.println("Qual o evento que pretende procurar informação?");
         int codigo = in.nextInt();
         try{
-            System.out.println(eventos.get(codigo).historicoApostas());
+            System.out.println(eventos.get(codigo).historicoOdds());
         } catch (NullPointerException e){
             System.out.println("Evento não existente");
         }
