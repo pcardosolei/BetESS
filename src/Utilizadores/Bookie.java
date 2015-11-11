@@ -5,7 +5,7 @@
  */
 package Utilizadores;
 
-
+import Eventos.Evento;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,7 +21,6 @@ public class Bookie extends Utilizador implements Observer {
     }
 
     
-    @Override
     public boolean verificaUtilizador(String nome,String password){
         return super.verificaUtilizador(nome, password);
     }

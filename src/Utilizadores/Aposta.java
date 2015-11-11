@@ -13,7 +13,6 @@ public class Aposta {
  
     private int valor;
     private int opcao;
-    private Apostador apostador; //qual o apostador no hash de apostadores
     private float odd;
     private boolean estado; // true-> aberto
     
@@ -21,13 +20,12 @@ public class Aposta {
         valor = 0;
         opcao = 0;
         odd = 0;
-        apostador = new Apostador();
         estado = false;
     }
     
-    public Aposta(int opcao, int valor, float odd,Apostador apostador){
+    public Aposta(int opcao, int valor, float odd){
         
-        this.apostador = apostador;
+
         this.opcao = opcao;
         this.valor = valor;
         this.odd = odd; 
@@ -78,16 +76,13 @@ public class Aposta {
         this.estado = estado;
     }
     
-    public void actualizaApostador(int vencedor){
-        setEstado(false);
-        if(vencedor == opcao)
-            getApostador().actualizaDisponivel(odd * valor);
-    }
-     
+    
      public String toString(){
                
         StringBuilder result = new StringBuilder();
-        result.append(this.apostador+" " + this.opcao + " " + this.valor); 
+
+        result.append(this.opcao+"\n");
+        result.append(this.valor+"\n");
         return result.toString();
         }
 
@@ -103,19 +98,5 @@ public class Aposta {
      */
     public void setOdd(int odd) {
         this.odd = odd;
-    }
-
-    /**
-     * @return the apostador
-     */
-    public Apostador getApostador() {
-        return apostador;
-    }
-
-    /**
-     * @param apostador the apostador to set
-     */
-    public void setApostador(Apostador apostador) {
-        this.apostador = apostador;
     }
 }

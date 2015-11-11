@@ -6,16 +6,13 @@
  */
 package Utilizadores;
 
-import java.util.Observable;
-import java.util.Observer;
-
 /**
  *
  * @author PauloCardoso
  */
-public class Apostador extends Utilizador implements Observer {
+public class Apostador extends Utilizador {
     
-    private float disponivel; 
+    private int disponivel; 
     
     public Apostador(){
         super();
@@ -33,22 +30,22 @@ public class Apostador extends Utilizador implements Observer {
     }
     
     
-        public float getDisponivel() {
+        public int getDisponivel() {
         return disponivel;
     }
 
     /**
      * @param disponivel the disponivel to set
      */
-    public void setDisponivel(float disponivel) {
+    public void setDisponivel(int disponivel) {
         this.disponivel = disponivel;
     }
     
-    public void Deposito(float valor){
+    public void Deposito(int valor){
         this.disponivel += valor;
     }
     
-    public void Levantamento(float valor){
+    public void Levantamento(int valor){
         if(valor > disponivel){
           System.out.println("não possui fundos.");  
         }
@@ -56,10 +53,6 @@ public class Apostador extends Utilizador implements Observer {
         this.disponivel -= valor;
             }
         }
-    
-    public void actualizaDisponivel(float valor){
-        setDisponivel(this.disponivel + valor);   
-    }
     
     public boolean verificaUtilizador(String nome,String password){
         return super.verificaUtilizador(nome, password);
@@ -73,13 +66,6 @@ public class Apostador extends Utilizador implements Observer {
          
         return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
                                 
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if(o!=null)
-            System.out.println("CENAS 1");
-        
     }
     
 }
