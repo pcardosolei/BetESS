@@ -7,8 +7,10 @@
 package app;
 
 import Eventos.Evento;
+import Utilizadores.Aposta;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -82,6 +84,7 @@ public class Sistema  {
                     break;
                 default:
                     System.out.println("Opção inválida.");
+                    break;
                 }
             } while(opcao != 0);
         } else if(login==2){
@@ -93,10 +96,15 @@ public class Sistema  {
                     break;
                 case 2: criarAposta();
                     break;
-                case 3: verEstadoAposta();
+                case 3: verEstadoApostasEvento();
+                    break;
+                case 4: depositar();
+                    break;
+                case 5: levantar();
                     break;
                 default:
                     System.out.println("Opção inválida.");
+                    break;
                 }
             } while(opcao != 0);
         }
@@ -121,6 +129,9 @@ public class Sistema  {
         System.out.println("\n\tBET ESS");
         System.out.println("Mostrar Eventos");
         System.out.println("Apostar em Evento");
+        System.out.println("Ver Estado Apostas em Evento");
+        System.out.println("Deposito");
+        System.out.println("Levantamento");
         System.out.print("Opcao:");
     }
     
@@ -203,6 +214,17 @@ public class Sistema  {
 
     }
    
+   public static void depositar(){
+       Scanner in = new Scanner(System.in);
+       int valor = Integer.parseInt(in.nextLine());
+       apostadores.get(apostador).Deposito(valor);
+   }
+   
+   public static void levantar(){
+       Scanner in = new Scanner(System.in);
+       int valor = Integer.parseInt(in.nextLine());
+       apostadores.get(apostador).Levantamento(valor);
+   }
    
 //bookie
     public static void criarEvento(){
@@ -268,10 +290,20 @@ public class Sistema  {
         }
     }
     
-    public static void verEstadoAposta(){
+    public static void verEstadoApostasEvento(){
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");
-        
+        try{
+            int codigo = in.nextInt();
+            ArrayList<Aposta> apostas = new ArrayList<>();
+            apostas = eventos.get(codigo).apostasApostador(apostadores.get(apostador));
+            for(Aposta a: apostas){
+                System.out.println(a.toString());
+            }
+        } catch(NullPointerException e){
+            System.out.println("Evento não encontrado");
+        }
+
     }
             
     public static boolean verificaApostador(String user, String pw){
