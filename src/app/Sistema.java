@@ -125,7 +125,7 @@ public class Sistema  {
         System.out.println("3-Ver Estado Apostas em Evento");
         System.out.println("4-Deposito");
         System.out.println("5-Levantamento");
-        System.out.print("Opcao:");
+        System.out.print("Opcao: ");
     }
     
    public static void menuInicial(){
