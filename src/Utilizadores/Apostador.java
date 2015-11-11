@@ -6,11 +6,14 @@
  */
 package Utilizadores;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author PauloCardoso
  */
-public class Apostador extends Utilizador {
+public class Apostador extends Utilizador implements Observer {
     
     private float disponivel; 
     
@@ -70,6 +73,13 @@ public class Apostador extends Utilizador {
          
         return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
                                 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o!=null)
+            System.out.println("CENAS 1");
+        
     }
     
 }

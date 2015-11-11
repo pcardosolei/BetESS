@@ -83,7 +83,7 @@ public class Aposta {
         if(vencedor == opcao)
             getApostador().actualizaDisponivel(odd * valor);
     }
-    
+     
      public String toString(){
                
         StringBuilder result = new StringBuilder();
