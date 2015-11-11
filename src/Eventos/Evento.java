@@ -1,26 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Eventos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import Utilizadores.Aposta;
+import Utilizadores.Apostador;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Evento {
+public class Evento extends Observable {
     
     private String[] equipas;
     private float[] odds;
     private boolean estado; //true = aberto
-    private int vencedor;
-    private ArrayList<Historico> historico;
+    private int vencedor; //vencedor
+    private ArrayList<Historico> historico; //historico de odds
     private ArrayList<Aposta> apostas; 
+    private ArrayList<Observer> observers;
     
     public Evento(){
         equipas = new String[3];
@@ -28,11 +27,10 @@ public class Evento {
         estado = false;
         apostas = new ArrayList<>();
         historico = new ArrayList<>();
+        observers = new ArrayList<>();
     }
     
-    
-    
-    public Evento(String[] equipas, float[] odds, boolean estado){
+    public Evento(String[] equipas, float[] odds){
       
         try{
         this.equipas = new String[3];
@@ -43,14 +41,17 @@ public class Evento {
         this.odds[0] = odds[0];
         this.odds[1] = odds[1];
         this.odds[2] = odds[2];
-        this.estado = estado;
         this.historico = new ArrayList<>();
         this.apostas = new ArrayList<>();
+        this.estado = true;
+        observers = new ArrayList<>();
         actualizaHistorico(odds);
+
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
         }
-        }
+       
+    }
 
     /**
      * @return the equipas
@@ -115,26 +116,32 @@ public class Evento {
         return nome;
     }
     
-    public void novaAposta(int valor, int opcao){
+    public void fecharEvento(){
+        this.estado = false;
+        for(Aposta a : getApostas()){
+            a.setEstado(false);
+        }
+    }
+    
+    public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];
-          
-       
-       Aposta newBet = new Aposta(opcao,valor,odd);
-       apostas.add(newBet);
+       Aposta newBet = new Aposta(opcao,valor,odd,apostador);
+        getApostas().add(newBet);
     }
+    
     public String printBet(){
         
-        StringBuilder bets= new StringBuilder();
+        StringBuilder result = new StringBuilder();
         
-            bets.append("Apostas:\n");
-        for(Aposta a: apostas)
-            {
-                bets.append(a.toString());
+            result.append("\n Apostas \n");
+            for(Aposta a: getApostas())
+            {   
+                int opcao = a.getOpcao();
+                int valor = a.getValor();
+                result.append(equipas[opcao] + " - " + valor + "€\n");
             }
-            bets.append("-----------------------");
-            bets.append("\n");
-            return bets.toString();
+            return result.toString();
             }
     
     
@@ -144,18 +151,18 @@ public class Evento {
         StringBuilder result = new StringBuilder();
         for( int i = 0; i <= odds.length - 1; i++)
         {
-            result.append( equipas[i] + " " + odds[i] + " | "); 
+            result.append(" | " + equipas[i] + " " + odds[i] + " | "); 
         }
-        for(Aposta a: apostas)
-        {
-            result.append(a.toString());
-        }
-        result.append("\n");
-        return result.toString();
+        if(this.estado)
+            result.append("Evento aberto");
+        else
+            result.append("Evento finalizado");
+       return result.toString();
         }
 
-        public String historicoApostas(){
+    public String historicoOdds(){
         StringBuilder result = new StringBuilder();
+        result.append("\n");
         for(Historico h: historico)
         {
             result.append(h.toString()); 
@@ -168,5 +175,53 @@ public class Evento {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
+        setChanged();
+        notifyObservers();
         }
+
+    public void setFinalizado(int vencedor){
+        if(this.estado){
+        this.vencedor= vencedor;
+        this.estado = false;
+        for(Aposta a: getApostas()){
+            a.actualizaApostador(vencedor);
+        }
+        setChanged();
+        notifyObservers();
+        } else {
+            System.out.println("Erro já se encontra finalizado");
+        }
+    }
+
+    /**
+     * @return the apostas
+     */
+    public ArrayList<Aposta> getApostas() {
+        return apostas;
+    }
+    
+    public ArrayList<Aposta> apostasApostador(Apostador apostador){
+        ArrayList<Aposta> aux = new ArrayList<>();
+         for(Aposta a: apostas){
+                if(a.getApostador().equals(apostador))
+                    aux.add(a);
+            }
+        return aux;
+    }
+    
+    
+    @Override 
+    public void addObserver(Observer o){
+        
+        observers.add(o);
+    }
+    
+ 
+    
+    @Override
+    public void notifyObservers(){   
+        for(Observer o: observers){
+            o.update(this, o);
+        }
+    }
 }

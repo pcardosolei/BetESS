@@ -15,18 +15,21 @@ public abstract class Utilizador {
     
     private String nome;
     private String mail;
+    private String password;
    
     
     public Utilizador(){
         
         nome = "";
         mail = "";
+        password = "";
     }
     
-    public Utilizador(String nome,String mail){
+    public Utilizador(String nome,String mail,String password){
         
         this.nome = nome;
         this.mail = mail;
+        this.password = password;
     }
   
     /**
@@ -72,4 +75,39 @@ public abstract class Utilizador {
         result.append(NEW_LINE);
         return result.toString();
         }
+     
+      //EQUALS
+     
+    public boolean verificaUtilizador(String nome,String password){
+        return(this.nome.equals(nome)
+                && this.password.equals(password));
+    }
+    
+    public boolean equals(Object obj)
+    {
+        boolean iguais = true;
+        
+        if(this == obj) return true;
+        if((obj == null) || (this.getClass() != obj.getClass())) return false;
+        
+        Utilizador c = (Utilizador) obj;
+        
+        return(this.nome.equals(c.getNome())
+                && this.mail.equals(c.getMail())
+                && this.password.equals(c.getPassword()));
+          }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

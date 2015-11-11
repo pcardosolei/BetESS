@@ -1,45 +1,54 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package Utilizadores;
-import java.util.ArrayList;
-import java.util.Scanner;
+
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author PauloCardoso
  */
-public class Apostador extends Utilizador {
+public class Apostador extends Utilizador implements Observer {
     
-    private int disponivel; 
+    private float disponivel; 
     
     public Apostador(){
         super();
         disponivel = 0;
     }
     
-    public Apostador(String nome,String mail, int disponivel){
-        super(nome,mail);
+    public Apostador(String nome,String mail,String password){
+        super(nome,mail,password);
+        this.disponivel = 0;
+    }
+    
+    public Apostador(String nome,String mail,String password, int disponivel){
+        super(nome,mail,password);
         this.disponivel = disponivel;
     }
     
-        public int getDisponivel() {
+    
+        public float getDisponivel() {
         return disponivel;
     }
 
     /**
      * @param disponivel the disponivel to set
      */
-    public void setDisponivel(int disponivel) {
+    public void setDisponivel(float disponivel) {
         this.disponivel = disponivel;
     }
     
-    public void Deposito(int valor){
+    public void Deposito(float valor){
         this.disponivel += valor;
     }
     
-    public void Levantamento(int valor){
+    public void Levantamento(float valor){
         if(valor > disponivel){
           System.out.println("não possui fundos.");  
         }
@@ -48,5 +57,30 @@ public class Apostador extends Utilizador {
             }
         }
     
+    public void actualizaDisponivel(float valor){
+        setDisponivel(this.disponivel + valor);   
+    }
+    
+    public boolean verificaUtilizador(String nome,String password){
+        return super.verificaUtilizador(nome, password);
+    }
+    
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if((obj == null) || (this.getClass() != obj.getClass())) return false;
+         
+        Apostador a = (Apostador) obj;
+         
+        return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
+                                
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o!=null)
+            System.out.println("CENAS 1");
+        
+    }
     
 }
+
