@@ -64,10 +64,14 @@ public class Apostador extends Utilizador implements Observer {
             return true;
     }
     
+    public void retiraValor(float valor){
+        this.disponivel -= valor;
+    }
     public void actualizaDisponivel(float valor){
         setDisponivel(this.disponivel + valor);   
     }
     
+    @Override
     public boolean verificaUtilizador(String nome,String password){
         return super.verificaUtilizador(nome, password);
     }

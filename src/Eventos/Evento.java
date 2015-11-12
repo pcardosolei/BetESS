@@ -175,8 +175,8 @@ public class Evento extends Observable {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
-        setChanged();
-        notifyObservers();
+        //setChanged();
+        //notifyObservers();
         }
 
     public void setFinalizado(int vencedor){
