@@ -6,10 +6,9 @@
  */
 package app;
 
-import Eventos.Evento;
-import Utilizadores.Aposta;
-import Utilizadores.Apostador;
-import Utilizadores.Bookie;
+import Eventos.*;
+import Criteria.*;
+import Utilizadores.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -79,6 +78,8 @@ public class Sistema  {
                     case 6: listaApostas();
                         break;
                     case 7: finalizarEvento();
+                        break;
+                    case 8: testarCriteria();
                         break;
                     default:
                         break;
@@ -280,7 +281,7 @@ public class Sistema  {
         odds[1] = Float.parseFloat(in.nextLine());
         System.out.println("Odd Vitoria Equipa2");
         odds[2] = Float.parseFloat(in.nextLine());
-        Evento evento = new Evento(equipas,odds);
+        Evento evento = new Evento(equipas,odds,bookies.get(bookielogado));
         Bookie bookie = bookies.get(bookielogado);
         evento.addObserver(bookie);
         eventos.put(eventos.size(),evento);
@@ -411,6 +412,19 @@ public class Sistema  {
         
      }
     
+    private static void testarCriteria(){
+        //CriteriaEventoAberto criterio1 = new CriteriaEventoAberto();
+        CriteriaEventoFechado criterio = new CriteriaEventoFechado();
+        CriteriaEventoBookie criteriob = new CriteriaEventoBookie();
+        AndCriteria andcriterio = new AndCriteria(criterio,criteriob);
+        
+        ArrayList<Evento> eventosValues= new ArrayList<>(eventos.values());
+        //System.out.println("Eventos Abertos");
+        //System.out.println(criterio1.meetCriteria(eventosValues));
+        System.out.println("Eventos Fechados do Nuno");
+        System.out.println(andcriterio.meetCriteria(eventosValues,bookies.get(bookielogado)));
+    }
+
     private static void carregaDados(){
         
         
@@ -429,8 +443,8 @@ public class Sistema  {
         bookies.put(bookies.size(),bookie2);
         
         //2 eventos
-        Evento evento1 = new Evento(new String[]{"porto","braga"},new float[]{1.5f,2f,3.4f});
-        Evento evento2 = new Evento(new String[]{"benfica","porto"},new float[]{1.3f,2f,4f});
+        Evento evento1 = new Evento(new String[]{"porto","braga"},new float[]{1.5f,2f,3.4f},bookie1);
+        Evento evento2 = new Evento(new String[]{"benfica","porto"},new float[]{1.3f,2f,4f},bookie1);
         
         eventos.put(eventos.size(),evento1);
         eventos.put(eventos.size(),evento2);

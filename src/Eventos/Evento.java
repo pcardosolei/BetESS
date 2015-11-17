@@ -4,6 +4,7 @@ package Eventos;
 import java.util.ArrayList;
 import Utilizadores.Aposta;
 import Utilizadores.Apostador;
+import Utilizadores.Bookie;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,6 +14,7 @@ import java.util.Observer;
  */
 public class Evento extends Observable {
     
+    private Bookie bookie;
     private String[] equipas;
     private float[] odds;
     private boolean estado; //true = aberto
@@ -28,9 +30,10 @@ public class Evento extends Observable {
         apostas = new ArrayList<>();
         historico = new ArrayList<>();
         observers = new ArrayList<>();
+        bookie = null;
     }
     
-    public Evento(String[] equipas, float[] odds){
+    public Evento(String[] equipas, float[] odds, Bookie bookie){
       
         try{
         this.equipas = new String[3];
@@ -45,6 +48,7 @@ public class Evento extends Observable {
         this.apostas = new ArrayList<>();
         this.estado = true;
         observers = new ArrayList<>();
+        this.bookie = bookie;
         actualizaHistorico(odds);
 
         }catch(Exception e){
@@ -237,5 +241,19 @@ public class Evento extends Observable {
             o.update(this,soma);
             }
         }
+    }
+
+    /**
+     * @return the bookie
+     */
+    public Bookie getBookie() {
+        return bookie;
+    }
+
+    /**
+     * @param bookie the bookie to set
+     */
+    public void setBookie(Bookie bookie) {
+        this.bookie = bookie;
     }
 }
