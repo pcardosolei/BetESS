@@ -3,8 +3,10 @@ package Eventos;
 
 import java.util.ArrayList;
 import Utilizadores.Aposta;
+import Utilizadores.Apostador;
 import Utilizadores.Bookie;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
@@ -12,12 +14,14 @@ import java.util.Observable;
  */
 public class Evento extends Observable {
     
+    private Bookie bookie;
     private String[] equipas;
     private float[] odds;
     private boolean estado; //true = aberto
-    private int vencedor;
-    private ArrayList<Historico> historico;
+    private int vencedor; //vencedor
+    private ArrayList<Historico> historico; //historico de odds
     private ArrayList<Aposta> apostas; 
+    private ArrayList<Observer> observers;
     
     public Evento(){
         equipas = new String[3];
@@ -25,9 +29,11 @@ public class Evento extends Observable {
         estado = false;
         apostas = new ArrayList<>();
         historico = new ArrayList<>();
+        observers = new ArrayList<>();
+        bookie = null;
     }
     
-    public Evento(String[] equipas, float[] odds, boolean estado){
+    public Evento(String[] equipas, float[] odds, Bookie bookie){
       
         try{
         this.equipas = new String[3];
@@ -38,12 +44,12 @@ public class Evento extends Observable {
         this.odds[0] = odds[0];
         this.odds[1] = odds[1];
         this.odds[2] = odds[2];
-        this.estado = estado;
         this.historico = new ArrayList<>();
         this.apostas = new ArrayList<>();
         this.estado = true;
+        observers = new ArrayList<>();
+        this.bookie = bookie;
         actualizaHistorico(odds);
-
 
         }catch(Exception e){
             System.out.println("Erro na criação do evento");
@@ -78,8 +84,6 @@ public class Evento extends Observable {
     public void setOdds(float[] odds) {
         this.odds = odds;
         actualizaHistorico(odds);
-        setChanged();
-        notifyObservers();
     }
 
     /**
@@ -118,31 +122,30 @@ public class Evento extends Observable {
     
     public void fecharEvento(){
         this.estado = false;
-        for(Aposta a : apostas){
+        for(Aposta a : getApostas()){
             a.setEstado(false);
         }
     }
     
-    public void novaAposta(int valor, int opcao){
+    public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];
-          
-       
-       Aposta newBet = new Aposta(opcao,valor,odd);
-       apostas.add(newBet);
+        Aposta newBet = new Aposta(opcao,valor,odd,apostador);
+        getApostas().add(newBet);
     }
+    
     public String printBet(){
         
-        StringBuilder bets= new StringBuilder();
+        StringBuilder result = new StringBuilder();
         
-            bets.append("Apostas:\n");
-            for(Aposta a: apostas)
-            {
-                bets.append(a.toString());
+            result.append("\n Apostas \n");
+            for(Aposta a: getApostas())
+            {   
+                int opcao = a.getOpcao();
+                int valor = a.getValor();
+                result.append(equipas[opcao] + " - " + valor + "€\n");
             }
-            bets.append("-----------------------");
-            bets.append("\n");
-            return bets.toString();
+            return result.toString();
             }
     
     
@@ -152,18 +155,18 @@ public class Evento extends Observable {
         StringBuilder result = new StringBuilder();
         for( int i = 0; i <= odds.length - 1; i++)
         {
-            result.append( equipas[i] + " " + odds[i] + " | "); 
+            result.append(" | " + equipas[i] + " " + odds[i] + " | "); 
         }
-        for(Aposta a: apostas)
-        {
-            result.append(a.toString());
-        }
-        result.append("\n");
-        return result.toString();
+        if(this.estado)
+            result.append("Evento aberto");
+        else
+            result.append("Evento finalizado");
+       return result.toString();
         }
 
-        public String historicoApostas(){
+    public String historicoOdds(){
         StringBuilder result = new StringBuilder();
+        result.append("\n");
         for(Historico h: historico)
         {
             result.append(h.toString()); 
@@ -176,7 +179,81 @@ public class Evento extends Observable {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
+        //setChanged();
+        //notifyObservers();
         }
 
+    public void setFinalizado(int vencedor){
+        if(this.estado){
+        this.vencedor= vencedor;
+        this.estado = false;
+        for(Aposta a: getApostas()){
+            a.actualizaApostador(vencedor);
+        }
+        setChanged();
+        notifyObservers();
+        } else {
+            System.out.println("Erro já se encontra finalizado");
+        }
+    }
+
+    /**
+     * @return the apostas
+     */
+    public ArrayList<Aposta> getApostas() {
+        return apostas;
+    }
     
+    public ArrayList<Aposta> apostasApostador(Apostador apostador){
+        ArrayList<Aposta> aux = new ArrayList<>();
+         for(Aposta a: apostas){
+                if(a.getApostador().equals(apostador))
+                    aux.add(a);
+            }
+        return aux;
+    }
+    
+    
+    @Override 
+    public void addObserver(Observer o){  
+        observers.add(o);
+        
+    }
+    
+ 
+    
+    @Override
+    public void notifyObservers(){   
+        for(Observer o: observers){
+            if(o.getClass().getName().equals("Utilizadores.Bookie"))
+            o.update(this, apostas);
+            else
+            {
+            Apostador actual =(Apostador) o;
+            float soma = 0;
+            for(Aposta a: apostas){
+                if(a.getApostador().equals(actual)){
+                    if(a.getOpcao()==vencedor){
+                        soma += a.getValor() * a.getOdd();
+                    }
+                }
+            }
+            o.update(this,soma);
+            }
+        }
+    }
+
+    /**
+     * @return the bookie
+     */
+    public Bookie getBookie() {
+        return bookie;
+    }
+
+    /**
+     * @param bookie the bookie to set
+     */
+    public void setBookie(Bookie bookie) {
+        this.bookie = bookie;
+    }
 }

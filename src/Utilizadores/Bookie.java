@@ -5,7 +5,8 @@
  */
 package Utilizadores;
 
-import Eventos.Evento;
+
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,14 +17,28 @@ import java.util.Observer;
 public class Bookie extends Utilizador implements Observer {
     
     
-    public Bookie(String nome, String email){
-        super(nome,email);
+    public Bookie(String nome, String email,String password){
+        super(nome,email,password);
     }
 
+    
+    @Override
+    public boolean verificaUtilizador(String nome,String password){
+        return super.verificaUtilizador(nome, password);
+    }
+    
+    
     @Override
     public void update(Observable o, Object arg) {
-        if(o!=null)
-            System.out.println("cenas");
+        ArrayList<Aposta> apostas =(ArrayList<Aposta>) arg;
+        int soma = 0;
+        if(o!=null){
+             for(Aposta a: apostas){
+                 soma += a.getValor();
+             }
+             System.out.println("Foram apostados " + soma + "€");
+        }
+            
     }
 
 }
