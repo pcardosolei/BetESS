@@ -61,6 +61,7 @@ public class Sistema  {
                 menuInicial();
             }
             if(login==1){ //bookie
+                System.out.println(bookies.get(bookielogado).retornaNotificacoes());
                 do{
                     DadosMenuBookie();
                     opcao = entrada.nextInt();    
@@ -88,6 +89,7 @@ public class Sistema  {
                 login = -1;
                 flag1 = true;
             } else if(login==2){
+                System.out.println(apostadores.get(apostador).retornaNotificacoes());
                 do{
                     DadosMenuApostador();
                     opcao = entrada.nextInt();

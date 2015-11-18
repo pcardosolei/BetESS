@@ -89,9 +89,10 @@ public class Apostador extends Utilizador implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         float valor =(float) arg;
-        if(o!=null)
-            System.out.println("Foi encerrado um evento e ganhou " + valor);
-        
+        if(o!=null){    
+            Notificacao nota = new Notificacao("Foi encerrado um evento e ganhou " + valor +"€",false);
+            super.addNotificacao(nota);
+        }
     }
     
 }

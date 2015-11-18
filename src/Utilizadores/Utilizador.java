@@ -1,9 +1,11 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package Utilizadores;
+
+import java.util.ArrayList;
 
 
 
@@ -13,6 +15,7 @@ package Utilizadores;
  */
 public abstract class Utilizador {
     
+    private ArrayList<Notificacao> notificacoes;
     private String nome;
     private String mail;
     private String password;
@@ -30,6 +33,7 @@ public abstract class Utilizador {
         this.nome = nome;
         this.mail = mail;
         this.password = password;
+        this.notificacoes = new ArrayList<>();
     }
   
     /**
@@ -109,5 +113,35 @@ public abstract class Utilizador {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public void addNotificacao(Notificacao nota){
+        notificacoes.add(nota);
+    }
+    /**
+     * @return the notificacoes
+     */
+    public ArrayList<Notificacao> getNotificacoes() {
+        return notificacoes;
+    }
+
+    /**
+     * @param notificacoes the notificacoes to set
+     */
+    public void setNotificacoes(ArrayList<Notificacao> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
+    
+    public String retornaNotificacoes(){
+        
+        StringBuilder result = new StringBuilder();
+        
+        
+        for(Notificacao a: notificacoes){
+            if(!a.isEstado())
+                result.append(a.toString());
+                a.setEstado(true);
+        }      
+        return result.toString();
     }
 }
