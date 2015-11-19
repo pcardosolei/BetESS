@@ -36,9 +36,10 @@ public class Bookie extends Utilizador implements Observer {
              for(Aposta a: apostas){
                  soma += a.getValor();
              }
-             System.out.println("Foram apostados " + soma + "€");
+             Notificacao nota = new Notificacao("Foram apostados " + soma + "€", false);
+             super.addNotificacao(nota);
         }
             
     }
-
+    
 }

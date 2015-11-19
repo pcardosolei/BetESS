@@ -162,7 +162,7 @@ public class Evento extends Observable {
         else
             result.append("Evento finalizado");
        return result.toString();
-        }
+    }
 
     public String historicoOdds(){
         StringBuilder result = new StringBuilder();

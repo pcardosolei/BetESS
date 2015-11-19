@@ -12,6 +12,7 @@ import Utilizadores.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -61,7 +62,10 @@ public class Sistema  {
                 menuInicial();
             }
             if(login==1){ //bookie
+                
                 do{
+                    System.out.println("----Notificações----");
+                    System.out.println(bookies.get(bookielogado).retornaNotificacoes());
                     DadosMenuBookie();
                     opcao = entrada.nextInt();    
                     switch(opcao){           
@@ -79,7 +83,7 @@ public class Sistema  {
                         break;
                     case 7: finalizarEvento();
                         break;
-                    case 8: testarCriteria();
+                    case 8: bookiesFechadoAberto();
                         break;
                     default:
                         break;
@@ -88,6 +92,8 @@ public class Sistema  {
                 login = -1;
                 flag1 = true;
             } else if(login==2){
+                System.out.println("----Notificações----");
+                System.out.println(apostadores.get(apostador).retornaNotificacoes());
                 do{
                     DadosMenuApostador();
                     opcao = entrada.nextInt();
@@ -123,6 +129,7 @@ public class Sistema  {
         System.out.println("5 - Mostrar Interesse em Evento");
         System.out.println("6 - Mostrar Lista de Apostas de Evento");
         System.out.println("7 - Finalizar Evento");
+        System.out.println("8 - Teste Critérios");
         System.out.println("0 - Menu Inicial");
         System.out.print("Opcao:");
     }
@@ -412,25 +419,82 @@ public class Sistema  {
         
      }
     
-    private static void testarCriteria(){
-        //CriteriaEventoAberto criterio1 = new CriteriaEventoAberto();
-        CriteriaEventoFechado criterio = new CriteriaEventoFechado();
-        CriteriaEventoBookie criteriob = new CriteriaEventoBookie();
-        AndCriteria andcriterio = new AndCriteria(criterio,criteriob);
-        
+    private static void bookiesFechadoAberto(){
+        Scanner in = new Scanner(System.in);
+        CriteriaEventoFechado eventofechado = new CriteriaEventoFechado();
         ArrayList<Evento> eventosValues= new ArrayList<>(eventos.values());
-        //System.out.println("Eventos Abertos");
-        //System.out.println(criterio1.meetCriteria(eventosValues));
-        System.out.println("Eventos Fechados do Nuno");
-        System.out.println(andcriterio.meetCriteria(eventosValues,bookies.get(bookielogado)));
-    }
+        CriteriaEventoBookie eventobookie = new CriteriaEventoBookie();
+        CriteriaEventoAberto eventoaberto = new CriteriaEventoAberto();
+        
+        System.out.println("Bookies");
+        for(Integer a: bookies.keySet()){
+            System.out.println(a + " - " + bookies.get(a).showBookie());
+        }
+        int opcao = Integer.parseInt(in.nextLine());
+        System.out.println("AND or OR");
+        String linha = in.nextLine();
+        if(linha.equals("AND")){
+            System.out.println("fechado ou aberto");
+            String linha2 = in.nextLine();
+            if(linha2.equals("fechado")){
+                AndCriteria andCriteria = new AndCriteria(eventofechado,eventobookie);
+                System.out.println("Eventos");
+                System.out.println(andCriteria.meetCriteria(eventosValues,bookies.get(opcao)));
+            } else if(linha2.equals("aberto")){
+                AndCriteria andCriteria = new AndCriteria(eventoaberto,eventobookie);
+                System.out.println("Eventos");
+                System.out.println(andCriteria.meetCriteria(eventosValues,bookies.get(opcao)));
+            } else
+                    System.out.println("ERRO");
+       } else if(linha.equals("OR")){
+            System.out.println("fechado ou aberto");
+            String linha2 = in.nextLine();
+            if(linha2.equals("fechado")){
+                OrCriteria orCriteria = new OrCriteria(eventofechado,eventobookie);
+                System.out.println("Eventos");
+                System.out.println(orCriteria.meetCriteria(eventosValues,bookies.get(opcao)));
+            }else if(linha2.equals("aberto")){
+                OrCriteria orCriteria = new OrCriteria(eventoaberto,eventobookie);
+                System.out.println("Eventos");
+                System.out.println(orCriteria.meetCriteria(eventosValues,bookies.get(opcao)));
+            } else
+                    System.out.println("ERRO");
 
+       }
+    }
+    
+    /*
+    private static void testarCriteria(){
+        int opcao1, opcao2, opcao3;
+        Scanner in = new Scanner(System.in);
+        ArrayList<Evento> eventosValues= new ArrayList<>(eventos.values());
+        List<Evento> aux = new ArrayList<>();
+        CriteriaEventoFechado eventofechado = new CriteriaEventoFechado();
+        CriteriaEventoAberto eventoaberto = new CriteriaEventoAberto();
+        CriteriaEventoBookie eventobookie = new CriteriaEventoBookie();
+        System.out.println("Introduza critérios");
+        String linha = in.nextLine();
+        String[] partes = linha.split(" [&|] ");
+        String[] dels = linha.split("[^&|]");
+        int i;
+        for(i=1;i<partes.length;i++){
+            if(dels[i-1].equals("&")){
+                CheckBookie(partes[i-1],partes[i]);
+                
+            } else if(dels[i-1].equals("|")){
+                CheckBookie(partes[i-1],partes[i]);
+                
+            } else break;
+                
+        }
+       }
+*/
     private static void carregaDados(){
         
         
         // 2 apostadores
         Apostador apostador1 = new Apostador("paulo","paulo@gmail.com","123");
-        Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt","231");
+        Apostador apostador2 = new Apostador("luis","luis@di.uminho.pt","231");
         apostadores.put(apostadores.size(),apostador1);
         apostadores.put(apostadores.size(),apostador2);
         apostadores.get(0).Deposito(200);
@@ -453,6 +517,7 @@ public class Sistema  {
         eventos.get(1).novaAposta(20, 0, apostador2);
         eventos.get(0).novaAposta(10,2,apostador2);
         eventos.get(0).novaAposta(200,0, apostador1);
+        eventos.get(0).addObserver(bookie1);
         eventos.get(0).addObserver(bookie2);
         eventos.get(0).addObserver(apostador2);
         
