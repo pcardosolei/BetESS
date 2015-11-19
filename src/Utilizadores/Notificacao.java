@@ -11,30 +11,30 @@ package Utilizadores;
  */
 public class Notificacao {
     
-    private String notificao;
+    private String texto;
     private boolean estado;
     
     public Notificacao(){
-        notificao = "";
+        texto = "";
     }
     
     public Notificacao(String notificacao, boolean estado){
-        this.notificao = notificacao;
+        this.texto = notificacao;
         this.estado = estado;
     }
 
     /**
-     * @return the notificao
+     * @return the texto
      */
     public String getNotificao() {
-        return notificao;
+        return texto;
     }
 
     /**
-     * @param notificao the notificao to set
+     * @param texto the texto to set
      */
-    public void setNotificao(String notificao) {
-        this.notificao = notificao;
+    public void setNotificao(String texto) {
+        this.texto = texto;
     }
 
     /**
@@ -55,6 +55,6 @@ public class Notificacao {
     
         
         StringBuilder result = new StringBuilder();
-        result.append(this.notificao);
+        result.append(this.texto);
         return result.toString();
     }}

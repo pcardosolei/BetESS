@@ -41,5 +41,5 @@ public class Bookie extends Utilizador implements Observer {
         }
             
     }
-
+    
 }

@@ -69,14 +69,11 @@ public abstract class Utilizador {
      */
 
     
-     public String toString(){
+     public String showBookie(){
         
         
         StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-      
-        result.append(NEW_LINE);
+        result.append("Nome: " + this.nome);  
         return result.toString();
         }
      
@@ -138,9 +135,10 @@ public abstract class Utilizador {
         
         
         for(Notificacao a: notificacoes){
-            if(!a.isEstado())
+            if(!(a.isEstado())){
                 result.append(a.toString());
                 a.setEstado(true);
+            }
         }      
         return result.toString();
     }
