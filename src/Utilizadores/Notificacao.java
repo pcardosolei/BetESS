@@ -51,6 +51,7 @@ public class Notificacao {
         this.estado = estado;
     }
     
+    @Override
     public String toString(){
     
         

@@ -12,7 +12,6 @@ import Utilizadores.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -57,7 +56,7 @@ public class Sistema  {
         while(opcao!=2){
             System.out.println("1-Entrar na aplicação");
             System.out.println("2-Sair da aplicação");
-            opcao = entrada.nextInt();
+            opcao = Integer.parseInt(entrada.nextLine());
             if(opcao == 1){
                 menuInicial();
             }
@@ -67,7 +66,7 @@ public class Sistema  {
                     System.out.println("----Notificações----");
                     System.out.println(bookies.get(bookielogado).retornaNotificacoes());
                     DadosMenuBookie();
-                    opcao = entrada.nextInt();    
+                    opcao = Integer.parseInt(entrada.nextLine());  
                     switch(opcao){           
                     case 1: criarEvento();
                         break;
@@ -96,7 +95,7 @@ public class Sistema  {
                 System.out.println(apostadores.get(apostador).retornaNotificacoes());
                 do{
                     DadosMenuApostador();
-                    opcao = entrada.nextInt();
+                    opcao = Integer.parseInt(entrada.nextLine());
                     switch(opcao){        
                     case 1: listaEventos();
                         break;
@@ -154,7 +153,7 @@ public class Sistema  {
             System.out.println("1 - Registar");
             System.out.println("2 - Login");
             System.out.println("0 - Menu Inicial");
-            opcao = entrada.nextInt();
+            opcao = Integer.parseInt(entrada.nextLine());
             switch(opcao){
                 case 1: criarConta(); //falta acabar
                     break;
@@ -214,7 +213,7 @@ public class Sistema  {
        System.out.println("Password");
        password = entrada.next();
        System.out.println("Quer ser apostador(1) ou bookie (2)?");
-       opcao = entrada.nextInt();      
+       opcao = Integer.parseInt(entrada.nextLine());     
        switch(opcao){
            case 1: Apostador apostador = new Apostador(nome,email,password,0);
                    apostadores.put(apostadores.size(),apostador);
@@ -233,11 +232,11 @@ public class Sistema  {
         int codigo,valor,opcao;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
-        codigo = in.nextInt();
+        codigo = Integer.parseInt(in.nextLine());
         System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
-        opcao=in.nextInt();
+        opcao = Integer.parseInt(in.nextLine());
         System.out.println("Que valor prentende apostar €:");
-        valor=in.nextInt();
+        valor = Integer.parseInt(in.nextLine());
       try{          
           if(apostadores.get(apostador).testaSaldo(valor)){
           eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));
@@ -328,7 +327,7 @@ public class Sistema  {
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");
         try{
-            int codigo = in.nextInt();
+            int codigo = Integer.parseInt(in.nextLine());
             System.out.println(eventos.get(codigo).printBet());
         } catch(Exception e){
             System.out.println("Evento não encontrado");
@@ -339,7 +338,7 @@ public class Sistema  {
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");
         try{
-            int codigo = in.nextInt();
+            int codigo = Integer.parseInt(in.nextLine());
             ArrayList<Aposta> apostas = new ArrayList<>();
             apostas = eventos.get(codigo).apostasApostador(apostadores.get(apostador));
             for(Aposta a: apostas){    
@@ -388,7 +387,7 @@ public class Sistema  {
         
         Scanner in = new Scanner(System.in);
         System.out.println("Qual o evento que pretende procurar informação?");
-        int codigo = in.nextInt();
+        int codigo = Integer.parseInt(in.nextLine());
         try{
             System.out.println(eventos.get(codigo).historicoOdds());
         } catch (NullPointerException e){
@@ -402,16 +401,16 @@ public class Sistema  {
         int codigo;
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
-        codigo = in.nextInt();
+        codigo = Integer.parseInt(in.nextLine());
         try{
             System.out.println(eventos.get(codigo).toString());
             equipas = eventos.get(codigo).getEquipas();
             System.out.println("Odd Vitoria " + equipas[0]);
-            odds[0] = in.nextFloat();
+            odds[0] =  Float.parseFloat(in.nextLine());
             System.out.println("Odd Empate");
-            odds[1] = in.nextFloat();
+            odds[1] = Float.parseFloat(in.nextLine());
             System.out.println("Odd Vitoria " + equipas[2]);
-            odds[2] = in.nextFloat(); 
+            odds[2] = Float.parseFloat(in.nextLine());
             eventos.get(codigo).setOdds(odds);
         } catch(Exception e){
             System.out.println("Não encontrou o evento");
@@ -509,17 +508,28 @@ public class Sistema  {
         //2 eventos
         Evento evento1 = new Evento(new String[]{"porto","braga"},new float[]{1.5f,2f,3.4f},bookie1);
         Evento evento2 = new Evento(new String[]{"benfica","porto"},new float[]{1.3f,2f,4f},bookie1);
+        Evento evento3 = new Evento(new String[]{"freamunde","chaves"}, new float[]{2f,1.5f,2f},bookie2);
+        Evento evento4 = new Evento(new String[]{"sporting","arouca"}, new float[]{1.1f,3f,7f},bookie2);
         
         eventos.put(eventos.size(),evento1);
         eventos.put(eventos.size(),evento2);
+        eventos.put(eventos.size(),evento3);
+        eventos.put(eventos.size(),evento4);
         
         //adicionar apostas
         eventos.get(1).novaAposta(20, 0, apostador2);
-        eventos.get(0).novaAposta(10,2,apostador2);
-        eventos.get(0).novaAposta(200,0, apostador1);
+        eventos.get(1).novaAposta(20, 1, apostador2);
+        eventos.get(2).novaAposta(10,2,apostador2);
+        eventos.get(0).novaAposta(150,0, apostador1);
+        eventos.get(3).novaAposta(30,1,apostador1);
         eventos.get(0).addObserver(bookie1);
+        eventos.get(1).addObserver(bookie1);       
+        eventos.get(2).addObserver(bookie1);
         eventos.get(0).addObserver(bookie2);
+        eventos.get(1).addObserver(bookie2);
         eventos.get(0).addObserver(apostador2);
+        eventos.get(1).addObserver(apostador2);
+        eventos.get(2).addObserver(apostador2);
         
     }
 }

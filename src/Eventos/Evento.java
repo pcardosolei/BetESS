@@ -166,12 +166,10 @@ public class Evento extends Observable {
 
     public String historicoOdds(){
         StringBuilder result = new StringBuilder();
-        result.append("\n");
+        
         for(Historico h: historico)
         {
-            result.append(h.toString()); 
-            result.append("\n");
-
+            result.append(h.toString());
         }
         return result.toString();
     }

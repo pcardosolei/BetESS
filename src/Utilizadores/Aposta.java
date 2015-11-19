@@ -87,7 +87,7 @@ public class Aposta {
      public String toString(){
                
         StringBuilder result = new StringBuilder();
-        result.append(this.apostador+" " + this.opcao + " " + this.valor); 
+        result.append(this.apostador+ " " + this.opcao + " " + this.valor); 
         return result.toString();
         }
 

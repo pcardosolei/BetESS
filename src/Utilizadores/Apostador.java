@@ -58,10 +58,7 @@ public class Apostador extends Utilizador implements Observer {
         }
     
     public boolean testaSaldo(float valor){
-        if(valor > disponivel)
-            return false;
-        else
-            return true;
+        return valor <= disponivel;
     }
     
     public void retiraValor(float valor){
