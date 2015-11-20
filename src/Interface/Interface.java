@@ -63,11 +63,11 @@ public class Interface {
                         break;
                     case 4: listaHistoricoEvento();
                         break;
-                    case 5: //mostrarInteresse();
+                    case 5: mostrarInteresseEvento();
                         break;
-                    case 6: //listaApostas();
+                    case 6: listaApostas();
                         break;
-                    case 7: //finalizarEvento();
+                    case 7: finalizarEvento();
                         break;
                     case 8: //bookiesFechadoAberto();
                         break;
@@ -92,13 +92,13 @@ public class Interface {
                         break;
                     case 2: //criarAposta();
                         break;
-                    case 3: //verEstadoApostasEvento();
+                    case 3: verEstadoApostasEvento();
                         break;
-                    case 4: //depositar();
+                    case 4: depositar();
                         break;
-                    case 5: //levantar();
+                    case 5: levantar();
                         break;
-                    case 6: //consultarSaldo();
+                    case 6: consultarSaldo();
                         break;
                     default:
                         break;
@@ -165,7 +165,9 @@ public class Interface {
        }
    }
    
-   //bookie
+  /*
+    BOOKIES
+   */
     public static void criarEvento(){
         
         String[] equipas = new String[2];
@@ -219,6 +221,99 @@ public class Interface {
         } catch (NullPointerException e){
             System.out.println("Evento não existente");
         }
+    }
+    
+    public static void mostrarInteresseEvento(){
+       Scanner in = new Scanner(System.in);
+       System.out.println("Qual é o Evento?");
+        try{
+            int codigo = Integer.parseInt(in.nextLine());
+            sistema.mostrarInteresse(codigo, bookie);
+        } catch(InputMismatchException e){
+            System.out.println("Não encontrou o evento");
+        } 
+    }
+    
+    public static void listaApostas(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual é o Evento?");
+        try{
+            int codigo = Integer.parseInt(in.nextLine());
+            System.out.println(sistema.listaApostas(codigo));
+        } catch(Exception e){
+            System.out.println("Evento não encontrado");
+        }
+    }
+    
+    public static void finalizarEvento(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual é o Evento?");
+        try{
+            int codigo = Integer.parseInt(in.nextLine());
+            System.out.println(sistema.showEvento(codigo));
+            System.out.println("Vencedor?");
+            int vencedor = Integer.parseInt(in.nextLine());
+            sistema.finalizarEvento(codigo,vencedor);
+        } catch(NullPointerException e){
+            System.out.println("Evento não encontrado");
+        } catch(InputMismatchException e){
+            System.out.println("Erro na Leitura");
+        }
+    }
+    /*
+        APOSTADOR
+    */
+    public static void criarAposta(){
+        int codigo,valor,opcao;
+        Scanner in = new Scanner(System.in);
+        System.out.println("Introduza o código do evento");
+        codigo = Integer.parseInt(in.nextLine());
+        System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
+        opcao = Integer.parseInt(in.nextLine());
+        System.out.println("Que valor prentende apostar €:");
+        valor = Integer.parseInt(in.nextLine());
+      try{
+          if(sistema.testarSaldo(apostador, valor)){
+            sistema.criarAposta(codigo,apostador,valor,opcao);
+            System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
+          }
+          else {
+              System.out.println("Está sem graveto");
+          }
+        } catch(Exception e){
+            System.out.println("Não encontrou o evento");
+        }
+
+    }
+    public static void depositar(){
+       Scanner in = new Scanner(System.in);
+       System.out.println("Valor a depositar?");
+       int valor = Integer.parseInt(in.nextLine());
+       sistema.depositar(valor,apostador);
+    
+    }
+    
+    public static void levantar(){
+       Scanner in = new Scanner(System.in);
+       System.out.println("Valor a levantar?");
+       int valor = Integer.parseInt(in.nextLine());
+       sistema.levantar(valor,apostador);
+    }
+    
+    public static void consultarSaldo(){
+        System.out.println("Saldo: "+sistema.consultarSaldo()+"€");
+    }
+    
+    public static void verEstadoApostasEvento(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual é o Evento?");
+        try{
+            int codigo = Integer.parseInt(in.nextLine());
+            System.out.println(sistema.verEstadoApostasEvento(codigo, apostador));        
+        } catch(NullPointerException e){
+            System.out.println("Evento não encontrado");
+        }
+
     }
     /*
         MENUS
