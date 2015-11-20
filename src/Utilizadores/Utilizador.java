@@ -136,7 +136,7 @@ public abstract class Utilizador {
         
         for(Notificacao a: notificacoes){
             if(!(a.isEstado())){
-                result.append(a.toString());
+                result.append(a.toString()+"\n");
                 a.setEstado(true);
             }
         }      
