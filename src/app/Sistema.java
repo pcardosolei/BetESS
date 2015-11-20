@@ -30,9 +30,6 @@ public class Sistema  {
     private static HashMap<Integer,Apostador> apostadores;
     private static HashMap<Integer,Bookie> bookies;
     private static HashMap<Integer,Evento> eventos;
-    private static int login; //apostador ou bookie
-    private static boolean flag1;
-    private static int bookielogado;
     private static int apostador;
     
     public Sistema(){
@@ -44,8 +41,7 @@ public class Sistema  {
    
     /*
      NOTIFICAÇÕES
-    */
-    
+    */  
     public String retornaNotificacoesBookie(int bookie){
         return bookies.get(bookie).retornaNotificacoes();
     }
@@ -56,8 +52,7 @@ public class Sistema  {
     /*
     LOGIN
     */
-    
-    public static int verificaApostador(String user, String pw){
+    public int verificaApostador(String user, String pw){
         int apostador = -1;
         for(Integer a: apostadores.keySet()){
             if((apostadores.get(a).verificaUtilizador(user, pw))){
@@ -67,7 +62,7 @@ public class Sistema  {
         return apostador;
     }
     
-    public static int verificaBookie(String user, String pw){
+    public int verificaBookie(String user, String pw){
         int bookie = -1;
         for(Integer a: bookies.keySet()){
             if((bookies.get(a).verificaUtilizador(user, pw))){
@@ -94,8 +89,7 @@ public class Sistema  {
    /*
    BOOKIES
    */
-    
-    public static void criarEvento(String[] equipas,float[] odds, int bookie ){
+    public void criarEvento(String[] equipas,float[] odds, int bookie ){
         Evento evento = new Evento(equipas,odds,bookies.get(bookie));
         Bookie bookieOb = bookies.get(bookie);
         evento.addObserver(bookieOb);
@@ -106,112 +100,57 @@ public class Sistema  {
       return eventos.get(codigo).historicoOdds();
     }
     
-     public static void editarOdds(int codigo, float[] odds){
+     public void editarOdds(int codigo, float[] odds){
          eventos.get(codigo).setOdds(odds);      
      }
      
-   //apostador
-   public static void criarAposta(){
-        int codigo,valor,opcao;
-        Scanner in = new Scanner(System.in);
-        System.out.println("Introduza o código do evento");
-        codigo = Integer.parseInt(in.nextLine());
-        System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
-        opcao = Integer.parseInt(in.nextLine());
-        System.out.println("Que valor prentende apostar €:");
-        valor = Integer.parseInt(in.nextLine());
-      try{          
-          if(apostadores.get(apostador).testaSaldo(valor)){
-          eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));
+     public void mostrarInteresse(int codigo,int bookie){      
+         eventos.get(codigo).addObserver(bookies.get(bookie));  
+        
+    }
+     
+    public static void finalizarEvento(int codigo, int vencedor){
+            eventos.get(codigo).setFinalizado(vencedor);  
+    }
+
+    public String listaApostas(int codigo){
+        return eventos.get(codigo).printBet();
+    }
+   /*
+    APOSTADOR
+    */  
+   public void criarAposta(int codigo, int apostador, int valor,int opcao){
+          eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));     
           eventos.get(codigo).addObserver(apostadores.get(apostador));
           apostadores.get(apostador).retiraValor(valor);
-          System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
-          }
-          else {
-              System.out.println("Está sem graveto");
-          }
-        } catch(Exception e){
-            System.out.println("Não encontrou o evento");
-        }
-
     }
    
-   public static void depositar(){
-       Scanner in = new Scanner(System.in);
-       System.out.println("Valor a depositar?");
-       int valor = Integer.parseInt(in.nextLine());
+   public void depositar(int apostador,int valor){
        apostadores.get(apostador).Deposito(valor);
    }
    
-   public static void levantar(){
-       Scanner in = new Scanner(System.in);
-       System.out.println("Valor a levantar?");
-       int valor = Integer.parseInt(in.nextLine());
-       apostadores.get(apostador).Levantamento(valor);
+   public void levantar(int valor, int apostador){
+       apostadores.get(apostador).Levantamento(valor); //falta o tratamento do erro
    }
    
-   public static void consultarSaldo(){
-       System.out.println(apostadores.get(apostador).getDisponivel() + "€");
+   public float consultarSaldo(){
+       return apostadores.get(apostador).getDisponivel();
    }
-
-  
-
-    public static void mostrarInteresse(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Qual é o Evento?");
-        try{
-            int codigo = Integer.parseInt(in.nextLine());
-            eventos.get(codigo).addObserver(bookies.get(bookielogado));  
-        } catch(InputMismatchException e){
-            System.out.println("Não encontrou o evento");
-        }
-    }
-    public static void finalizarEvento(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Qual é o Evento?");
-        try{
-            int codigo = Integer.parseInt(in.nextLine());
-            System.out.println(eventos.get(codigo).toString());
-            System.out.println("Vencedor?");
-            int vencedor = Integer.parseInt(in.nextLine());
-            eventos.get(codigo).setFinalizado(vencedor);
-        } catch(NullPointerException e){
-            System.out.println("Evento não encontrado");
-        } catch(InputMismatchException e){
-            System.out.println("Erro na Leitura");
-        }
-        
-    }
-
-    public static void listaApostas(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Qual é o Evento?");
-        try{
-            int codigo = Integer.parseInt(in.nextLine());
-            System.out.println(eventos.get(codigo).printBet());
-        } catch(Exception e){
-            System.out.println("Evento não encontrado");
-        }
-    }
+   
+   public boolean testarSaldo(int apostador,int valor){
+       return apostadores.get(apostador).testaSaldo(valor);
+   }
     
-    
-    public static void verEstadoApostasEvento(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Qual é o Evento?");
-        try{
-            int codigo = Integer.parseInt(in.nextLine());
-            ArrayList<Aposta> apostas = new ArrayList<>();
-            apostas = eventos.get(codigo).apostasApostador(apostadores.get(apostador));
+    public String verEstadoApostasEvento(int codigo, int apostador){
+        StringBuilder result = new StringBuilder();
+       
+        ArrayList<Aposta> apostas = new ArrayList<>();
+        apostas = eventos.get(codigo).apostasApostador(apostadores.get(apostador));
             for(Aposta a: apostas){    
-                System.out.println(a.toString());
-            }
-        } catch(NullPointerException e){
-            System.out.println("Evento não encontrado");
-        }
-
+                result.append(a);
+            }   
+            return result.toString();
     }
-            
-
     /*
      AMBOS
     */
@@ -278,7 +217,6 @@ public class Sistema  {
                 System.out.println(orCriteria.meetCriteria(eventosValues,bookies.get(opcao)));
             } else
                     System.out.println("ERRO");
-
        }
     }
     
