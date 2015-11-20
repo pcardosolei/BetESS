@@ -138,10 +138,15 @@ public class Evento extends Observable {
     public void novaAposta(int valor, int opcao){
         float odd;
         odd=this.odds[opcao];
+<<<<<<< HEAD
           
        
        Aposta newBet = new Aposta(opcao,valor,odd);
        apostas.add(newBet);
+=======
+        Aposta newBet = new Aposta(opcao,valor,odd,apostador);
+        getApostas().add(newBet);
+>>>>>>> refs/remotes/origin/dev
     }
     public String printBet(){
         
@@ -188,7 +193,66 @@ public class Evento extends Observable {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
+<<<<<<< HEAD
+=======
+        //setChanged();
+        //notifyObservers();
+        }
+
+    public void setFinalizado(int vencedor){
+        if(this.estado){
+        this.vencedor= vencedor;
+        this.estado = false;
+        for(Aposta a: getApostas()){
+            a.actualizaApostador(vencedor);
+        }
+        setChanged();
+        notifyObservers();
+        } else {
+            System.out.println("Erro já se encontra finalizado");
+>>>>>>> refs/remotes/origin/dev
         }
 
     
+<<<<<<< HEAD
+=======
+    public ArrayList<Aposta> apostasApostador(Apostador apostador){
+        ArrayList<Aposta> aux = new ArrayList<>();
+         for(Aposta a: apostas){
+                if(a.getApostador().equals(apostador))
+                    aux.add(a);
+            }
+        return aux;
+    }
+    
+    
+    @Override 
+    public void addObserver(Observer o){  
+        observers.add(o);
+        
+    }
+    
+ 
+    
+    @Override
+    public void notifyObservers(){   
+        for(Observer o: observers){
+            if(o.getClass().getName().equals("Utilizadores.Bookie"))
+            o.update(this, apostas);
+            else
+            {
+            Apostador actual =(Apostador) o;
+            float soma = 0;
+            for(Aposta a: apostas){
+                if(a.getApostador().equals(actual)){
+                    if(a.getOpcao()==vencedor){
+                        soma += a.getValor() * a.getOdd();
+                    }
+                }
+            }
+            o.update(this,soma);
+            }
+        }
+    }
+>>>>>>> refs/remotes/origin/dev
 }

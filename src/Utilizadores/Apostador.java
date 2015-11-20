@@ -54,6 +54,24 @@ public class Apostador extends Utilizador {
             }
         }
     
+<<<<<<< HEAD
+=======
+    public boolean testaSaldo(float valor){
+        if(valor > disponivel)
+            return false;
+        else
+            return true;
+    }
+    
+    public void retiraValor(float valor){
+        this.disponivel -= valor;
+    }
+    public void actualizaDisponivel(float valor){
+        setDisponivel(this.disponivel + valor);   
+    }
+    
+    @Override
+>>>>>>> refs/remotes/origin/dev
     public boolean verificaUtilizador(String nome,String password){
         return super.verificaUtilizador(nome, password);
     }
@@ -67,6 +85,17 @@ public class Apostador extends Utilizador {
         return(super.equals(a)  && this.disponivel == (a.getDisponivel()));
                                 
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public void update(Observable o, Object arg) {
+        float valor =(float) arg;
+        if(o!=null)
+            System.out.println("Foi encerrado um evento e ganhou " + valor);
+        
+    }
+>>>>>>> refs/remotes/origin/dev
     
 }
 

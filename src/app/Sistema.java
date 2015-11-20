@@ -16,6 +16,17 @@ import java.util.Scanner;
  *
  * @author PauloCardoso
  */
+<<<<<<< HEAD
+=======
+
+
+/*
+
+PUXAR UMA CAMADA PARA CIMA A CAMADA DE INTERFACE E DEIXAR ESTE COMO CONTROLLER
+
+
+*/
+>>>>>>> refs/remotes/origin/dev
 public class Sistema  {
 
     /**
@@ -93,6 +104,8 @@ public class Sistema  {
                         break;
                     case 5: levantar();
                         break;
+                    case 6: consultarSaldo();
+                        break;
                     default:
                         break;
                     }
@@ -105,23 +118,26 @@ public class Sistema  {
 
     public static void DadosMenuBookie(){
         System.out.println("\n\tBET ESS");
-        System.out.println("1-Criar Evento");
-        System.out.println("2-Mostrar Eventos");
-        System.out.println("3-Editar Odds");
-        System.out.println("4-Historico odds de um evento");
-        System.out.println("5-Mostrar Interesse em Evento");
-        System.out.println("6-Mostrar Lista de Apostas de Evento");
-        System.out.println("7-Finalizar Evento");
+        System.out.println("1 - Criar Evento");
+        System.out.println("2 - Mostrar Eventos");
+        System.out.println("3 - Editar Odds");
+        System.out.println("4 - Historico odds de um evento");
+        System.out.println("5 - Mostrar Interesse em Evento");
+        System.out.println("6 - Mostrar Lista de Apostas de Evento");
+        System.out.println("7 - Finalizar Evento");
+        System.out.println("0 - Menu Inicial");
         System.out.print("Opcao:");
     }
     
     public static void DadosMenuApostador(){
         System.out.println("\n\tBET ESS");
-        System.out.println("1-Mostrar Eventos");
-        System.out.println("2-Apostar em Evento");
-        System.out.println("3-Ver Estado Apostas em Evento");
-        System.out.println("4-Deposito");
-        System.out.println("5-Levantamento");
+        System.out.println("1 - Mostrar Eventos");
+        System.out.println("2 - Apostar em Evento");
+        System.out.println("3 - Ver Estado Apostas em Evento");
+        System.out.println("4 - Deposito");
+        System.out.println("5 - Levantamento");   
+        System.out.println("6 - ConsultarSaldo");
+        System.out.println("0 - Menu Inicial");
         System.out.print("Opcao: ");
     }
     
@@ -133,7 +149,7 @@ public class Sistema  {
         while(flag1 == true){
             System.out.println("1 - Registar");
             System.out.println("2 - Login");
-            System.out.println("0 - Sair");
+            System.out.println("0 - Menu Inicial");
             opcao = entrada.nextInt();
             switch(opcao){
                 case 1: criarConta();
@@ -142,6 +158,11 @@ public class Sistema  {
                     break;
                 default: flag1 = false;
                     break;
+<<<<<<< HEAD
+=======
+                default: flag1 = false;
+                    break;
+>>>>>>> refs/remotes/origin/dev
             }
         }
         if(login==1){ //bookie
@@ -268,6 +289,7 @@ public class Sistema  {
         opcao=in.nextInt();
         System.out.println("Que valor prentende apostar €:");
         valor=in.nextInt();
+<<<<<<< HEAD
       try{
             
           eventos.get(codigo).novaAposta(valor, opcao);
@@ -275,12 +297,45 @@ public class Sistema  {
           
             
     } catch(Exception e){
+=======
+      try{          
+          if(apostadores.get(apostador).testaSaldo(valor)){
+          eventos.get(codigo).novaAposta(valor, opcao,apostadores.get(apostador));
+          eventos.get(codigo).addObserver(apostadores.get(apostador));
+          apostadores.get(apostador).retiraValor(valor);
+          System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
+          }
+          else {
+              System.out.println("Está sem graveto");
+          }
+        } catch(Exception e){
+>>>>>>> refs/remotes/origin/dev
             System.out.println("Não encontrou o evento");
         }
 
     }
    
+<<<<<<< HEAD
 
+=======
+   public static void depositar(){
+       Scanner in = new Scanner(System.in);
+       System.out.println("Valor a depositar?");
+       int valor = Integer.parseInt(in.nextLine());
+       apostadores.get(apostador).Deposito(valor);
+   }
+   
+   public static void levantar(){
+       Scanner in = new Scanner(System.in);
+       System.out.println("Valor a levantar?");
+       int valor = Integer.parseInt(in.nextLine());
+       apostadores.get(apostador).Levantamento(valor);
+   }
+   
+   public static void consultarSaldo(){
+       System.out.println(apostadores.get(apostador).getDisponivel() + "€");
+   }
+>>>>>>> refs/remotes/origin/dev
 //bookie
 
     public static void criarEvento(){
@@ -311,9 +366,26 @@ public class Sistema  {
 
     public static String listaApostas(){
     
+<<<<<<< HEAD
         StringBuilder result = new StringBuilder();
         String NEW_LINE=System.getProperty("line.separator");  
         return result.toString();
+=======
+    public static void verEstadoApostasEvento(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual é o Evento?");
+        try{
+            int codigo = in.nextInt();
+            ArrayList<Aposta> apostas = new ArrayList<>();
+            apostas = eventos.get(codigo).apostasApostador(apostadores.get(apostador));
+            for(Aposta a: apostas){    
+                System.out.println(a.toString());
+            }
+        } catch(NullPointerException e){
+            System.out.println("Evento não encontrado");
+        }
+
+>>>>>>> refs/remotes/origin/dev
     }
     
     public static boolean verificaApostador(String user, String pw){
@@ -372,6 +444,7 @@ public class Sistema  {
             System.out.println("Evento não existente");
         }
     }
+    
     public static void editarOdds(){
         float[] odds = new float[3];
         String[] equipas = new String[3];
@@ -401,10 +474,34 @@ public class Sistema  {
         Apostador apostador2 = new Apostador("luis brito","luis@di.uminho.pt","231");
         apostadores.put(apostadores.size(),apostador1);
         apostadores.put(apostadores.size(),apostador2);
+<<<<<<< HEAD
+=======
+        apostadores.get(0).Deposito(200);
+        apostadores.get(1).Deposito(300);
+        
+        //2 bookies
+>>>>>>> refs/remotes/origin/dev
         Bookie bookie1 = new Bookie("nuno santos","nuno@gmail.com","12341");
         Bookie bookie2 = new Bookie("xavier fernandes", "xavier@di.uminho.pt","1231");
         bookies.put(bookies.size(),bookie1);
         bookies.put(bookies.size(),bookie2);
         
+<<<<<<< HEAD
+=======
+        //2 eventos
+        Evento evento1 = new Evento(new String[]{"porto","braga"},new float[]{1.5f,2f,3.4f});
+        Evento evento2 = new Evento(new String[]{"benfica","porto"},new float[]{1.3f,2f,4f});
+        
+        eventos.put(eventos.size(),evento1);
+        eventos.put(eventos.size(),evento2);
+        
+        //adicionar apostas
+        eventos.get(1).novaAposta(20, 0, apostador2);
+        eventos.get(0).novaAposta(10,2,apostador2);
+        eventos.get(0).novaAposta(200,0, apostador1);
+        eventos.get(0).addObserver(bookie2);
+        eventos.get(0).addObserver(apostador2);
+        
+>>>>>>> refs/remotes/origin/dev
     }
 }
