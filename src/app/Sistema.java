@@ -19,8 +19,6 @@ import java.util.Scanner;
  * @author PauloCardoso 
  * @author LuisBrito
  */
-
-
 /*
 PUXAR UMA CAMADA PARA CIMA A CAMADA DE INTERFACE E DEIXAR ESTE COMO CONTROLLER
 */
@@ -44,43 +42,74 @@ public class Sistema  {
         carregaDados();
     }
    
+    /*
+     NOTIFICAÇÕES
+    */
+    
     public String retornaNotificacoesBookie(int bookie){
-        return bookies.get(bookie).retornaNotificacoes().toString();
+        return bookies.get(bookie).retornaNotificacoes();
     }
     public String retornaNotificacoesApostador(int apostador){
-        return bookies.get(apostador).retornaNotificacoes().toString();
+        return apostadores.get(apostador).retornaNotificacoes();
     }
     
-
-   
-   
-   public static void criarConta(){
-       Scanner entrada = new Scanner(System.in);
-       String nome;
-       String email;
-       String password;
-       int opcao;
-       System.out.println("Introduza o seu nome");
-       nome = entrada.nextLine();
-       System.out.println("Introduza o seu email");
-       email = entrada.nextLine();
-       System.out.println("Password");
-       password = entrada.next();
-       System.out.println("Quer ser apostador(1) ou bookie (2)?");
-       opcao = Integer.parseInt(entrada.nextLine());     
-       switch(opcao){
-           case 1: Apostador apostador = new Apostador(nome,email,password,0);
-                   apostadores.put(apostadores.size(),apostador);
-                   break;
-           case 2: Bookie bookie = new Bookie(nome,email,password);
-                   bookies.put(bookies.size(),bookie);
-                   break; 
-           default: System.out.println("Introduziu dados errados");
-                   break;
-       }
-   }
-   
-   
+    /*
+    LOGIN
+    */
+    
+    public static int verificaApostador(String user, String pw){
+        int apostador = -1;
+        for(Integer a: apostadores.keySet()){
+            if((apostadores.get(a).verificaUtilizador(user, pw))){
+                apostador = a;
+            }
+        }
+        return apostador;
+    }
+    
+    public static int verificaBookie(String user, String pw){
+        int bookie = -1;
+        for(Integer a: bookies.keySet()){
+            if((bookies.get(a).verificaUtilizador(user, pw))){
+                bookie = a;
+            }
+        }
+        return bookie;
+    }
+    
+    /*
+    REGISTOS
+    */
+    
+    public void criarApostador(String nome,String email, String password){
+        Apostador apostador = new Apostador(nome,email,password,0);
+        apostadores.put(apostadores.size(),apostador);
+    }
+    
+    public void criarBookie(String nome,String email, String password){
+       Bookie bookie = new Bookie(nome,email,password);
+       bookies.put(bookies.size(),bookie); 
+    }   
+    
+   /*
+   BOOKIES
+   */
+    
+    public static void criarEvento(String[] equipas,float[] odds, int bookie ){
+        Evento evento = new Evento(equipas,odds,bookies.get(bookie));
+        Bookie bookieOb = bookies.get(bookie);
+        evento.addObserver(bookieOb);
+        eventos.put(eventos.size(),evento);
+    }
+    
+    public String listaHistoricoEvento(int codigo){ 
+      return eventos.get(codigo).historicoOdds();
+    }
+    
+     public static void editarOdds(int codigo, float[] odds){
+         eventos.get(codigo).setOdds(odds);      
+     }
+     
    //apostador
    public static void criarAposta(){
         int codigo,valor,opcao;
@@ -124,32 +153,9 @@ public class Sistema  {
    public static void consultarSaldo(){
        System.out.println(apostadores.get(apostador).getDisponivel() + "€");
    }
-//bookie
-    public static void criarEvento(){
-        
-        String[] equipas = new String[2];
-        float[] odds = new float[3];
-        Scanner in = new Scanner(System.in);
-        System.out.println("Equipa1");
-        equipas[0] = in.nextLine();
-        System.out.println("Equipa2");
-        equipas[1] = in.nextLine();
-        try{
-        System.out.println("Odd Vitoria Equipa1");
-        odds[0] = Float.parseFloat(in.nextLine());
-        System.out.println("Odd Empate");
-        odds[1] = Float.parseFloat(in.nextLine());
-        System.out.println("Odd Vitoria Equipa2");
-        odds[2] = Float.parseFloat(in.nextLine());
-        Evento evento = new Evento(equipas,odds,bookies.get(bookielogado));
-        Bookie bookie = bookies.get(bookielogado);
-        evento.addObserver(bookie);
-        eventos.put(eventos.size(),evento);
-        } catch(Exception e){
-            System.out.println("Evento Não Criado . Introduza odds do tipo inteiro,decimal");
-        }
-    }
-    
+
+  
+
     public static void mostrarInteresse(){
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");
@@ -205,73 +211,32 @@ public class Sistema  {
 
     }
             
-    public static boolean verificaApostador(String user, String pw){
-        boolean flag = true;
-        for(Integer a: apostadores.keySet()){
-            if((apostadores.get(a).verificaUtilizador(user, pw))){
-                flag= false;
-                apostador = a;
-            }
-        }
-        return flag;
-    }
+
+    /*
+     AMBOS
+    */
     
-    public static boolean verificaBookie(String user, String pw){
-        boolean flag = true;
-        for(Integer a: bookies.keySet()){
-            if((bookies.get(a).verificaUtilizador(user, pw))){
-                flag= false;
-                bookielogado = a;
-            }
-        }
-        return flag;
-    }
-    public static void listaEventos(){
+    public String listaEventos(){
         
         StringBuilder result = new StringBuilder();
-
-        for(Integer evento: eventos.keySet())
-        {
-            result.append("\nEVENTO " + evento + ": ");
+        for(Integer evento: eventos.keySet()) {
+            result.append("\nEVENTOS " + evento + ": ");
             result.append(eventos.get(evento).toString()); 
         }
-        System.out.println(result.toString());
+        return result.toString();
     }
     
-    public static void listaHistoricoEvento(){
-        
-        Scanner in = new Scanner(System.in);
-        System.out.println("Qual o evento que pretende procurar informação?");
-        int codigo = Integer.parseInt(in.nextLine());
-        try{
-            System.out.println(eventos.get(codigo).historicoOdds());
-        } catch (NullPointerException e){
-            System.out.println("Evento não existente");
-        }
+    public String showEvento(int codigo){
+        return eventos.get(codigo).toString();
     }
     
-    public static void editarOdds(){
-        float[] odds = new float[3];
-        String[] equipas = new String[3];
-        int codigo;
-        Scanner in = new Scanner(System.in);
-        System.out.println("Introduza o código do evento");
-        codigo = Integer.parseInt(in.nextLine());
-        try{
-            System.out.println(eventos.get(codigo).toString());
-            equipas = eventos.get(codigo).getEquipas();
-            System.out.println("Odd Vitoria " + equipas[0]);
-            odds[0] =  Float.parseFloat(in.nextLine());
-            System.out.println("Odd Empate");
-            odds[1] = Float.parseFloat(in.nextLine());
-            System.out.println("Odd Vitoria " + equipas[2]);
-            odds[2] = Float.parseFloat(in.nextLine());
-            eventos.get(codigo).setOdds(odds);
-        } catch(Exception e){
-            System.out.println("Não encontrou o evento");
-        }
-        
-     }
+    /*
+     AUXILIAR
+    */
+    
+    public String[] getEquipas(int codigo){
+        return eventos.get(codigo).getEquipas();
+    }
     
     private static void bookiesFechadoAberto(){
         Scanner in = new Scanner(System.in);
@@ -344,8 +309,6 @@ public class Sistema  {
        }
 */
     private static void carregaDados(){
-        
-        
         // 2 apostadores
         Apostador apostador1 = new Apostador("paulo","paulo@gmail.com","123");
         Apostador apostador2 = new Apostador("luis","luis@di.uminho.pt","231");
@@ -384,33 +347,6 @@ public class Sistema  {
         eventos.get(1).addObserver(bookie2);
         eventos.get(0).addObserver(apostador2);
         eventos.get(1).addObserver(apostador2);
-        eventos.get(2).addObserver(apostador2);
-        
+        eventos.get(2).addObserver(apostador2);    
     }
 }
-
-    /*
-    public static void main(String[] args) {
-        // TODO code application logic here
-        flag1 = true;
-        bookielogado = -1;
-        apostador = -1;
-        
-       
-        Scanner entrada = new Scanner(System.in);
-        int opcao = -1; //opcao scanner 
-        while(opcao!=2){
-            System.out.println("1-Entrar na aplicação");
-            System.out.println("2-Sair da aplicação");
-            opcao = Integer.parseInt(entrada.nextLine());
-            if(opcao == 1){
-                menuInicial();
-            }
-            if(login==1){ //bookie
-              parteBookie();
-            } else if(login==2){
-              parteApostador();  
-           }
-        } 
-   }
-    */

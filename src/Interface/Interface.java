@@ -48,20 +48,20 @@ public class Interface {
     public static void parteBookie(){
                 int opcao;
                 Scanner entrada = new Scanner(System.in);
-                System.out.println("----Notificações----");
-                //colocar o sistema a devolver notificaçoes
-                System.out.println(sistema.retornaNotificacoesBookie(bookie)); 
                 do{
+                     //colocar o sistema a devolver notificaçoes
+                     System.out.println("----Notificações----"); 
+                     System.out.println(sistema.retornaNotificacoesBookie(bookie));     
                     DadosMenuBookie();
                     opcao = Integer.parseInt(entrada.nextLine());  
                     switch(opcao){           
-                    case 1: //criarEvento();
+                    case 1: criarEvento();
                         break;
-                    case 2: //listaEventos();
+                    case 2: System.out.println(sistema.listaEventos());
                         break;
-                    case 3: //editarOdds();
+                    case 3: editarOdds(); //aqui falta testar quem muda as odds
                         break;
-                    case 4: //listaHistoricoEvento();
+                    case 4: listaHistoricoEvento();
                         break;
                     case 5: //mostrarInteresse();
                         break;
@@ -82,13 +82,13 @@ public class Interface {
     public static void parteApostador(){
                 int opcao;
                 Scanner entrada = new Scanner(System.in);
-                System.out.println("----Notificações----");
-                System.out.println(sistema.retornaNotificacoesApostador(apostador));
-                do{
+                 do{
+                    System.out.println("----Notificações----");
+                    System.out.println(sistema.retornaNotificacoesApostador(apostador));
                     DadosMenuApostador();
                     opcao = Integer.parseInt(entrada.nextLine());
                     switch(opcao){        
-                    case 1: //listaEventos();
+                    case 1: System.out.println(sistema.listaEventos());
                         break;
                     case 2: //criarAposta();
                         break;
@@ -109,7 +109,7 @@ public class Interface {
     }   
    
    public static void Login(){
-     System.out.println("-- Bookie 1 | Apostador 2");
+     System.out.println("-- Bookie 1 | Apostador 2 --");
      Scanner entrada = new Scanner(System.in);
      String user, pw;
      try{
@@ -118,8 +118,9 @@ public class Interface {
          case 1: System.out.print("Username: ");
                  user = entrada.nextLine();
                  System.out.print("Password: ");
-                 pw = entrada.nextLine();    
-                 if(!(sistema.verificaBookie(user,pw))){ 
+                 pw = entrada.nextLine(); 
+                 bookie = sistema.verificaBookie(user,pw);
+                 if(bookie != -1){ 
                     login = 1;
                     flag1 = false;
                  }
@@ -128,7 +129,8 @@ public class Interface {
                  user = entrada.nextLine();
                  System.out.print("Password: ");
                  pw = entrada.nextLine(); 
-                 if(!(sistema.verificaApostador(user,pw))){
+                 apostador = sistema.verificaApostador(user,pw);
+                 if(apostador != -1){
                     login = 2;  
                     flag1 = false; 
                  }
@@ -138,8 +140,7 @@ public class Interface {
          System.out.println("erro na leitura de dados");
         }
     }   
-    
-    /*
+
    public static void criarConta(){
        Scanner entrada = new Scanner(System.in);
        String nome;
@@ -151,21 +152,74 @@ public class Interface {
        System.out.println("Introduza o seu email");
        email = entrada.nextLine();
        System.out.println("Password");
-       password = entrada.next();
+       password = entrada.nextLine();
        System.out.println("Quer ser apostador(1) ou bookie (2)?");
        opcao = Integer.parseInt(entrada.nextLine());     
        switch(opcao){
-           case 1: Apostador apostador = new Apostador(nome,email,password,0);
-                   apostadores.put(apostadores.size(),apostador);
+           case 1: sistema.criarApostador(nome, email, password);
                    break;
-           case 2: Bookie bookie = new Bookie(nome,email,password);
-                   bookies.put(bookies.size(),bookie);
+           case 2: sistema.criarBookie(nome, email, password);
                    break; 
            default: System.out.println("Introduziu dados errados");
                    break;
        }
    }
-   */
+   
+   //bookie
+    public static void criarEvento(){
+        
+        String[] equipas = new String[2];
+        float[] odds = new float[3];
+        Scanner in = new Scanner(System.in);
+        System.out.println("Equipa1");
+        equipas[0] = in.nextLine();
+        System.out.println("Equipa2");
+        equipas[1] = in.nextLine();
+        try{
+        System.out.println("Odd Vitoria Equipa1");
+        odds[0] = Float.parseFloat(in.nextLine());
+        System.out.println("Odd Empate");
+        odds[1] = Float.parseFloat(in.nextLine());
+        System.out.println("Odd Vitoria Equipa2");
+        odds[2] = Float.parseFloat(in.nextLine());
+        sistema.criarEvento(equipas,odds,bookie);
+        } catch(Exception e){
+            System.out.println("Evento Não Criado . Introduza odds do tipo inteiro,decimal");
+        }
+    }
+    
+    public static void editarOdds(){
+        float[] odds = new float[3];
+        String[] equipas = new String[3];
+        int codigo;
+        Scanner in = new Scanner(System.in);
+        System.out.println("Introduza o código do evento");
+        codigo = Integer.parseInt(in.nextLine());
+        try{
+            System.out.println(sistema.showEvento(codigo));
+            equipas = sistema.getEquipas(codigo);
+            System.out.println("Odd Vitoria " + equipas[0]);
+            odds[0] =  Float.parseFloat(in.nextLine());
+            System.out.println("Odd Empate");
+            odds[1] = Float.parseFloat(in.nextLine());
+            System.out.println("Odd Vitoria " + equipas[2]);
+            odds[2] = Float.parseFloat(in.nextLine());
+            sistema.editarOdds(codigo,odds);
+        } catch(Exception e){
+            System.out.println("Não encontrou o evento");
+        }
+    }
+    
+    public static void listaHistoricoEvento(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Qual o evento que pretende procurar informação?");
+        int codigo = Integer.parseInt(in.nextLine());
+        try{
+            System.out.println(sistema.listaHistoricoEvento(codigo));
+        } catch (NullPointerException e){
+            System.out.println("Evento não existente");
+        }
+    }
     /*
         MENUS
     */
@@ -205,9 +259,9 @@ public class Interface {
             System.out.println("0 - Menu Inicial");
             opcao = Integer.parseInt(entrada.nextLine());
             switch(opcao){
-                case 1: //criarConta(); 
+                case 1: criarConta(); 
                     break;
-                case 2: //Login(); 
+                case 2: Login(); 
                     break;
                 default: flag1 = false;
                     break;
