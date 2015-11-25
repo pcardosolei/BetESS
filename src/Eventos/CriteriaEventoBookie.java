@@ -16,19 +16,18 @@ import java.util.List;
  */
 public class CriteriaEventoBookie implements Criteria {
 
+    private Bookie bookie;
+    
+    public CriteriaEventoBookie(Bookie b){
+        this.bookie=b;
+    }
+
     @Override
     public List<Evento> meetCriteria(List<Evento> eventos) {
         ArrayList<Evento> aux = new ArrayList<>();
-        return aux;
-        
-     }
-
-    @Override
-    public List<Evento> meetCriteria(List<Evento> eventos, Bookie b) {
-        ArrayList<Evento> aux = new ArrayList<>();
         
         for(Evento a: eventos){
-            if(a.getBookie().equals(b))
+            if(a.getBookie().equals(bookie))
                 aux.add(a);
         }
         

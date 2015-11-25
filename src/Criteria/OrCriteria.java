@@ -10,7 +10,6 @@ package Criteria;
  * @author PauloCardoso
  */
 import Eventos.Evento;
-import Utilizadores.Bookie;
 import java.util.List;
 
 public class OrCriteria implements Criteria {
@@ -35,17 +34,4 @@ public class OrCriteria implements Criteria {
       }	
       return firstCriteriaItems;
    }
-
-    @Override
-    public List<Evento> meetCriteria(List<Evento> eventos, Bookie a) {
-      List<Evento> firstCriteriaItems = criteria.meetCriteria(eventos,a);
-      List<Evento> otherCriteriaItems = otherCriteria.meetCriteria(eventos,a);
-
-      for (Evento evento : otherCriteriaItems) {
-         if(!firstCriteriaItems.contains(evento)){
-            firstCriteriaItems.add(evento);
-         }
-      }	
-      return firstCriteriaItems;
-    }
 }

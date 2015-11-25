@@ -10,7 +10,6 @@ package Criteria;
  * @author PauloCardoso
  */
 import Eventos.Evento;
-import Utilizadores.Bookie;
 import java.util.List;
 
 public class AndCriteria implements Criteria {
@@ -30,10 +29,4 @@ public class AndCriteria implements Criteria {
       return otherCriteria.meetCriteria(firstCriteriaPersons);
    }
 
-    @Override
-    public List<Evento> meetCriteria(List<Evento> eventos, Bookie b) {
-      List<Evento> firstCriteriaPersons = criteria.meetCriteria(eventos,b);		
-      return otherCriteria.meetCriteria(firstCriteriaPersons,b);
-  
-    }
 }

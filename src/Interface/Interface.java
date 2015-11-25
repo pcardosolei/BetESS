@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import Exception.*;
 import app.Sistema;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -69,7 +70,7 @@ public class Interface {
                         break;
                     case 7: finalizarEvento();
                         break;
-                    case 8: //bookiesFechadoAberto();
+                    case 8: testarCriteria();
                         break;
                     default:
                         break;
@@ -90,7 +91,7 @@ public class Interface {
                     switch(opcao){        
                     case 1: System.out.println(sistema.listaEventos());
                         break;
-                    case 2: //criarAposta();
+                    case 2: criarAposta();
                         break;
                     case 3: verEstadoApostasEvento();
                         break;
@@ -206,10 +207,13 @@ public class Interface {
             odds[1] = Float.parseFloat(in.nextLine());
             System.out.println("Odd Vitoria " + equipas[2]);
             odds[2] = Float.parseFloat(in.nextLine());
-            sistema.editarOdds(codigo,odds);
-        } catch(Exception e){
+            sistema.editarOdds(codigo,odds,bookie);
+        } catch(BookieIncorretoException e ) {
+            System.out.println("O evento pertence a "+ e.getName());
+        }   
+         catch(Exception e){
             System.out.println("Não encontrou o evento");
-        }
+        } 
     }
     
     public static void listaHistoricoEvento(){
@@ -260,6 +264,14 @@ public class Interface {
             System.out.println("Erro na Leitura");
         }
     }
+    
+    private static void testarCriteria(){
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Introduza critérios");
+        String linha = in.nextLine();
+        System.out.println(sistema.testaCriteria(linha));
+       }
     /*
         APOSTADOR
     */
@@ -275,7 +287,7 @@ public class Interface {
       try{
           if(sistema.testarSaldo(apostador, valor)){
             sistema.criarAposta(codigo,apostador,valor,opcao);
-            System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
+            System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ sistema.escolha(codigo,opcao));
           }
           else {
               System.out.println("Está sem graveto");
@@ -297,11 +309,15 @@ public class Interface {
        Scanner in = new Scanner(System.in);
        System.out.println("Valor a levantar?");
        int valor = Integer.parseInt(in.nextLine());
+       try{
        sistema.levantar(valor,apostador);
+       }catch(SemSaldoException e){
+           System.out.println(e.getMessage());
+       }
     }
     
     public static void consultarSaldo(){
-        System.out.println("Saldo: "+sistema.consultarSaldo()+"€");
+        System.out.println("Saldo: "+sistema.consultarSaldo(apostador)+"€");
     }
     
     public static void verEstadoApostasEvento(){

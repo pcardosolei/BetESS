@@ -6,6 +6,7 @@
  */
 package Utilizadores;
 
+import Exception.SemSaldoException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,9 +49,9 @@ public class Apostador extends Utilizador implements Observer {
         this.disponivel += valor;
     }
     
-    public void Levantamento(float valor){
+    public void Levantamento(float valor) throws SemSaldoException{
         if(valor > disponivel){
-          System.out.println("não possui fundos.");  
+            throw new SemSaldoException(disponivel);
         }
         else{
         this.disponivel -= valor;

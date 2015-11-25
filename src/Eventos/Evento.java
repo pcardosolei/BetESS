@@ -127,6 +127,10 @@ public class Evento extends Observable {
         }
     }
     
+    public boolean verificaBookie(Bookie b){
+        return this.bookie.equals(b);
+    }
+    
     public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];

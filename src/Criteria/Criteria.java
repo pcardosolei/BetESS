@@ -16,7 +16,8 @@ import java.util.List;
 
 public interface Criteria {
      public List<Evento> meetCriteria(List<Evento> eventos);
+
+    public Criteria clone();
      
-     public List<Evento> meetCriteria(List<Evento> eventos, Bookie b);
 
 }
