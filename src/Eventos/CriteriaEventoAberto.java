@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class CriteriaEventoAberto implements Criteria {
 
+    
+    
     @Override
     public List<Evento> meetCriteria(List<Evento> eventos) {
            List<Evento> aux = new ArrayList<Evento>();
@@ -27,4 +29,7 @@ public class CriteriaEventoAberto implements Criteria {
            return aux;
     }
     
+    public CriteriaEventoAberto clone(){
+        return new CriteriaEventoAberto();
+    }
 }

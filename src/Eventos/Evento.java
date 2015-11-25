@@ -162,9 +162,9 @@ public class Evento extends Observable {
             result.append(" | " + equipas[i] + " " + odds[i] + " | "); 
         }
         if(this.estado)
-            result.append("Evento aberto");
+            result.append("Evento aberto\n");
         else
-            result.append("Evento finalizado");
+            result.append("Evento finalizado\n");
        return result.toString();
     }
 

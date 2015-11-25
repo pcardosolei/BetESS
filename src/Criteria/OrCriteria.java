@@ -34,4 +34,6 @@ public class OrCriteria implements Criteria {
       }	
       return firstCriteriaItems;
    }
+   
+   public OrCriteria clone(){return null;}
 }

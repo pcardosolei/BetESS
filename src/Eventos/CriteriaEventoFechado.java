@@ -30,4 +30,8 @@ public class CriteriaEventoFechado implements Criteria {
            }
            return aux;
     }   
+    
+    public CriteriaEventoFechado clone(){
+        return new CriteriaEventoFechado();
+    }
 }

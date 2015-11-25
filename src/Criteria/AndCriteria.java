@@ -29,4 +29,5 @@ public class AndCriteria implements Criteria {
       return otherCriteria.meetCriteria(firstCriteriaPersons);
    }
 
+   public AndCriteria clone(){return null;}
 }

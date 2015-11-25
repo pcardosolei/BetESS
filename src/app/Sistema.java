@@ -11,7 +11,6 @@ import Criteria.*;
 import Utilizadores.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 import Exception.*;
 import java.util.List;
 
@@ -188,45 +187,56 @@ public class Sistema  {
        
         ArrayList<Evento> eventosValues= new ArrayList<>(eventos.values());
         List<Evento> aux = new ArrayList<>();
-        String[] partes = linha.split(" [&|] ");
-        String[] dels = linha.split("[^&|]");
-        Criteria criteria;
+        String[] partes = linha.split(" (and|or) ");
+        String[] dels1 = linha.split(" ");
+        String[] dels = new String[dels1.length];
+        int j = 0;
+        for(int a=0;a<dels.length;a++){
+            if(dels1[a].equals("and") || dels1[a].equals("or")){
+                dels[j] = dels1[a];
+                j++;
+            }
+        }
+        
+        
+        Criteria primeiro;
         boolean correcto=true;
             switch(partes[0]){
                 case "aberto":
-                    criteria=new CriteriaEventoAberto();
+                    primeiro = new CriteriaEventoAberto();
                     break;
                 case "fechado":
-                    criteria = new CriteriaEventoFechado();
+                    primeiro = new CriteriaEventoFechado();
                     break;
                 default:
-                    criteria=new CriteriaEventoBookie(bookies.get(Integer.parseInt(partes[0])));
+                    primeiro = new CriteriaEventoBookie(bookies.get(Integer.parseInt(partes[0])));
                     break;
             }
         
-            for(int i=1;i<(partes.length)-1;i+=2){
-                Criteria criteria1;
-                Criteria criteriaLogica;
+            for(int i=1;i<partes.length;i++){
+                Criteria segundo;
+                Criteria auxiliar;
                 
                 switch(partes[i]){
                     case "aberto":
-                    criteria1=new CriteriaEventoAberto();
+                    segundo =new CriteriaEventoAberto();
                     break;
                 case "fechado":
-                    criteria1= new CriteriaEventoFechado();
+                    segundo = new CriteriaEventoFechado();
                     break;
                 default:
-                    criteria1=new CriteriaEventoBookie(bookies.get(Integer.parseInt(partes[0])));
+                    segundo = new CriteriaEventoBookie(bookies.get(Integer.parseInt(partes[i])));
                     break;
                 
                 }
                 switch(dels[i-1]){
-                   case "&":
-                    criteriaLogica=criteria.clone();
-                    criteria=new AndCriteria(criteriaLogica,criteria1);
+                   case "and":
+                    auxiliar = primeiro.clone();
+                    primeiro = new AndCriteria(auxiliar,segundo);
                     break;
-                   case "|":
-                    criteriaLogica=new OrCriteria(criteria,criteria1);
+                   case "or":
+                    auxiliar = primeiro.clone();
+                    primeiro = new OrCriteria(auxiliar,segundo);
                     break;
                    default:
                     correcto=false;
@@ -235,84 +245,15 @@ public class Sistema  {
                 
             }
             if(correcto){
-                
-            
+                aux = primeiro.meetCriteria(eventosValues);
+                return aux.toString();
             }
             else{
-                System.out.println("SYNTAX ERROR. \n");
+                  return "SYNTAX ERROR. \n";
             }
+       
+        }
         
-        
-        
-        }
-        else{
-        for(i=0;dels.length > i;i++){
-            
-            if(dels[i].equals("&")){
-                AndCriteria criteria;
-                switch(partes[i+1]){
-                    case "fechado":
-                        CriteriaEventoFechado cenasF = new CriteriaEventoFechado();
-                        criteria = new AndCriteria(cenas1,cenasF);
-                        aux = criteria.meetCriteria(aux);
-                        break;
-                    case "aberto":
-                        CriteriaEventoAberto cenasB = new CriteriaEventoAberto();
-                        criteria = new AndCriteria(cenas1,cenasB);
-                        aux = criteria.meetCriteria(aux);
-                        break;
-                    default: 
-                        CriteriaEventoBookie eventosbookie = new CriteriaEventoBookie();
-                        criteria = new AndCriteria(cenas1,eventosbookie);
-                        aux = criteria.meetCriteria(eventosValues,bookies.get(Integer.parseInt(partes[0])));
-                        break;
-                }
-                
-                 aux = criteria.meetCriteria(aux);
-            } if(dels[i].equals("|")){
-                OrCriteria criteria;
-                switch(partes[i+1]){
-                    case "fechado":
-                        CriteriaEventoFechado cenasF = new CriteriaEventoFechado();
-                        criteria = new OrCriteria(cenas1,cenasF);
-                        aux = criteria.meetCriteria(aux);
-                        break;
-                    case "aberto":
-                        CriteriaEventoAberto cenasB = new CriteriaEventoAberto();
-                        criteria = new OrCriteria(cenas1,cenasB);
-                        aux = criteria.meetCriteria(aux);
-                        break;
-                    default: 
-                        CriteriaEventoBookie eventosbookie = new CriteriaEventoBookie();
-                        criteria = new OrCriteria(cenas1,eventosbookie);
-                        aux = criteria.meetCriteria(eventosValues,bookies.get(Integer.parseInt(partes[0])));
-                        break;
-                }
-                aux = 
-            }
-        }
-        }
-        return aux.toString();
-    }
-    private List<Evento> teste(String[] partes,int i){
-        ArrayList<Evento> eventosValues= new ArrayList<>(eventos.values());
-        List<Evento> aux = new ArrayList<>();
-        switch(partes[0]){
-            case "fechado":
-                CriteriaEventoFechado eventosfechado = new CriteriaEventoFechado();
-                aux = eventosfechado.meetCriteria(eventosValues);
-                break;
-            case "aberto":
-                CriteriaEventoAberto eventosaberto = new CriteriaEventoAberto();
-                aux = eventosaberto.meetCriteria(eventosValues);
-                break;
-            default: 
-                CriteriaEventoBookie eventosbookie = new CriteriaEventoBookie();
-                aux = eventosbookie.meetCriteria(eventosValues,bookies.get(Integer.parseInt(partes[0])));
-                break;
-        }
-        return aux;
-    }
    
     /*
     
