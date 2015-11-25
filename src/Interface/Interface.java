@@ -90,7 +90,7 @@ public class Interface {
                     switch(opcao){        
                     case 1: System.out.println(sistema.listaEventos());
                         break;
-                    case 2: //criarAposta();
+                    case 2: criarAposta();
                         break;
                     case 3: verEstadoApostasEvento();
                         break;
@@ -275,7 +275,7 @@ public class Interface {
       try{
           if(sistema.testarSaldo(apostador, valor)){
             sistema.criarAposta(codigo,apostador,valor,opcao);
-            System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ eventos.get(codigo).betRes(opcao));
+            System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ sistema.escolha(codigo,opcao));
           }
           else {
               System.out.println("Está sem graveto");
@@ -301,7 +301,7 @@ public class Interface {
     }
     
     public static void consultarSaldo(){
-        System.out.println("Saldo: "+sistema.consultarSaldo()+"€");
+        System.out.println("Saldo: "+sistema.consultarSaldo(apostador)+"€");
     }
     
     public static void verEstadoApostasEvento(){

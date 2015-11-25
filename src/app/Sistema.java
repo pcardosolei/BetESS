@@ -11,7 +11,6 @@ import Criteria.*;
 import Utilizadores.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -30,7 +29,6 @@ public class Sistema  {
     private static HashMap<Integer,Apostador> apostadores;
     private static HashMap<Integer,Bookie> bookies;
     private static HashMap<Integer,Evento> eventos;
-    private static int apostador;
     
     public Sistema(){
         eventos = new HashMap<>();
@@ -125,7 +123,7 @@ public class Sistema  {
           apostadores.get(apostador).retiraValor(valor);
     }
    
-   public void depositar(int apostador,int valor){
+   public void depositar(int valor,int apostador){
        apostadores.get(apostador).Deposito(valor);
    }
    
@@ -133,7 +131,7 @@ public class Sistema  {
        apostadores.get(apostador).Levantamento(valor); //falta o tratamento do erro
    }
    
-   public float consultarSaldo(){
+   public float consultarSaldo(int apostador){
        return apostadores.get(apostador).getDisponivel();
    }
    
@@ -173,6 +171,10 @@ public class Sistema  {
      AUXILIAR
     */
     
+    public String escolha(int codigo,int opcao){
+        return eventos.get(codigo).betRes(opcao).toString();
+        
+    }
     public String[] getEquipas(int codigo){
         return eventos.get(codigo).getEquipas();
     }
