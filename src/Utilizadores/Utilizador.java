@@ -19,6 +19,7 @@ public abstract class Utilizador {
     private String nome;
     private String mail;
     private String password;
+    private String nickname;
    
     
     public Utilizador(){
@@ -28,11 +29,12 @@ public abstract class Utilizador {
         password = "";
     }
     
-    public Utilizador(String nome,String mail,String password){
+    public Utilizador(String nome,String mail,String password,String nickname){
         
         this.nome = nome;
         this.mail = mail;
         this.password = password;
+        this.nickname = nickname;
         this.notificacoes = new ArrayList<>();
     }
   
@@ -141,5 +143,19 @@ public abstract class Utilizador {
             }
         }      
         return result.toString();
+    }
+
+    /**
+     * @return the nickname
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * @param nickname the nickname to set
+     */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

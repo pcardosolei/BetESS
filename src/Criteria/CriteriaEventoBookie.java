@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Eventos;
+package Criteria;
 
-import Criteria.Criteria;
+
+import Eventos.Evento;
 import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.List;

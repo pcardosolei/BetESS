@@ -3,12 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Eventos;
+package Observer;
+
+import Eventos.Evento;
+
+
 
 /**
  *
  * @author TEN
  */
-class Observers {
+public interface Observer {
     
+    public void update(Evento o, Object arg);
+    public void update(String[] equipas);
 }
