@@ -1,18 +1,17 @@
 
 package Eventos;
 
+import Observer.*;
 import java.util.ArrayList;
 import Utilizadores.Aposta;
 import Utilizadores.Apostador;
 import Utilizadores.Bookie;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  *
  * @author PauloCardoso
  */
-public class Evento extends Observable {
+public class Evento implements Subject {
     
     private Bookie bookie;
     private String[] equipas;
@@ -127,6 +126,10 @@ public class Evento extends Observable {
         }
     }
     
+    public boolean verificaBookie(Bookie b){
+        return this.bookie.equals(b);
+    }
+    
     public void novaAposta(int valor, int opcao,Apostador apostador){
         float odd;
         odd=this.odds[opcao];
@@ -158,9 +161,9 @@ public class Evento extends Observable {
             result.append(" | " + equipas[i] + " " + odds[i] + " | "); 
         }
         if(this.estado)
-            result.append("Evento aberto");
+            result.append("Evento aberto\n");
         else
-            result.append("Evento finalizado");
+            result.append("Evento finalizado\n");
        return result.toString();
     }
 
@@ -177,8 +180,7 @@ public class Evento extends Observable {
     private void actualizaHistorico(float[] odds) {
         Historico actual = new Historico(odds);
         historico.add(actual);
-        //setChanged();
-        //notifyObservers();
+        notifyObserverOdds();
         }
 
     public void setFinalizado(int vencedor){
@@ -188,8 +190,7 @@ public class Evento extends Observable {
         for(Aposta a: getApostas()){
             a.actualizaApostador(vencedor);
         }
-        setChanged();
-        notifyObservers();
+        notifyObserver();
         } else {
             System.out.println("Erro já se encontra finalizado");
         }
@@ -212,16 +213,37 @@ public class Evento extends Observable {
     }
     
     
-    @Override 
-    public void addObserver(Observer o){  
-        observers.add(o);
-        
-    }
+   
     
  
     
+    /**
+     * @return the bookie
+     */
+    public Bookie getBookie() {
+        return bookie;
+    }
+
+    /**
+     * @param bookie the bookie to set
+     */
+    public void setBookie(Bookie bookie) {
+        this.bookie = bookie;
+    }
+
     @Override
-    public void notifyObservers(){   
+    public void register(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void unregister(Observer o) {
+        int observerIndex = observers.indexOf(o);
+        observers.remove(observerIndex);
+    }
+
+    @Override
+    public void notifyObserver() {
         for(Observer o: observers){
             if(o.getClass().getName().equals("Utilizadores.Bookie"))
             o.update(this, apostas);
@@ -241,17 +263,10 @@ public class Evento extends Observable {
         }
     }
 
-    /**
-     * @return the bookie
-     */
-    public Bookie getBookie() {
-        return bookie;
-    }
-
-    /**
-     * @param bookie the bookie to set
-     */
-    public void setBookie(Bookie bookie) {
-        this.bookie = bookie;
+    @Override
+    public void notifyObserverOdds() {
+        for(Observer o: observers){
+            o.update(equipas);
+        }
     }
 }

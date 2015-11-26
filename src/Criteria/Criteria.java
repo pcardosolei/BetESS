@@ -11,12 +11,11 @@ package Criteria;
  */
 
 import Eventos.Evento;
-import Utilizadores.Bookie;
 import java.util.List;
 
 public interface Criteria {
      public List<Evento> meetCriteria(List<Evento> eventos);
-     
-     public List<Evento> meetCriteria(List<Evento> eventos, Bookie b);
+
+     public Criteria clone();
 
 }

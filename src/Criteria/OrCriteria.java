@@ -10,7 +10,6 @@ package Criteria;
  * @author PauloCardoso
  */
 import Eventos.Evento;
-import Utilizadores.Bookie;
 import java.util.List;
 
 public class OrCriteria implements Criteria {
@@ -22,11 +21,17 @@ public class OrCriteria implements Criteria {
       this.criteria = criteria;
       this.otherCriteria = otherCriteria; 
    }
+   
+     public OrCriteria(OrCriteria a){
+       this.criteria = a.getCriteria();
+       this.otherCriteria = a.getOtherCriteria();
+   }
+
 
    @Override
    public List<Evento> meetCriteria(List<Evento> eventos) {
-      List<Evento> firstCriteriaItems = criteria.meetCriteria(eventos);
-      List<Evento> otherCriteriaItems = otherCriteria.meetCriteria(eventos);
+      List<Evento> firstCriteriaItems = getCriteria().meetCriteria(eventos);
+      List<Evento> otherCriteriaItems = getOtherCriteria().meetCriteria(eventos);
 
       for (Evento evento : otherCriteriaItems) {
          if(!firstCriteriaItems.contains(evento)){
@@ -35,17 +40,22 @@ public class OrCriteria implements Criteria {
       }	
       return firstCriteriaItems;
    }
+   
+   public OrCriteria clone(){
+       return new OrCriteria(this);
+   }
 
-    @Override
-    public List<Evento> meetCriteria(List<Evento> eventos, Bookie a) {
-      List<Evento> firstCriteriaItems = criteria.meetCriteria(eventos,a);
-      List<Evento> otherCriteriaItems = otherCriteria.meetCriteria(eventos,a);
+    /**
+     * @return the criteria
+     */
+    public Criteria getCriteria() {
+        return criteria;
+    }
 
-      for (Evento evento : otherCriteriaItems) {
-         if(!firstCriteriaItems.contains(evento)){
-            firstCriteriaItems.add(evento);
-         }
-      }	
-      return firstCriteriaItems;
+    /**
+     * @return the otherCriteria
+     */
+    public Criteria getOtherCriteria() {
+        return otherCriteria;
     }
 }

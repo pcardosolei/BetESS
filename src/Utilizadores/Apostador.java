@@ -6,8 +6,9 @@
  */
 package Utilizadores;
 
-import java.util.Observable;
-import java.util.Observer;
+import Eventos.Evento;
+import Exception.SemSaldoException;
+import Observer.Observer;
 
 /**
  *
@@ -22,13 +23,13 @@ public class Apostador extends Utilizador implements Observer {
         disponivel = 0;
     }
     
-    public Apostador(String nome,String mail,String password){
-        super(nome,mail,password);
+    public Apostador(String nome,String mail,String password,String nickname){
+        super(nome,mail,password,nickname);
         this.disponivel = 0;
     }
     
-    public Apostador(String nome,String mail,String password, int disponivel){
-        super(nome,mail,password);
+    public Apostador(String nome,String mail,String password, int disponivel,String nickname){
+        super(nome,mail,password,nickname);
         this.disponivel = disponivel;
     }
     
@@ -48,17 +49,22 @@ public class Apostador extends Utilizador implements Observer {
         this.disponivel += valor;
     }
     
-    public void Levantamento(float valor){
+    public void Levantamento(float valor) throws SemSaldoException{
         if(valor > disponivel){
-          System.out.println("não possui fundos.");  
+            throw new SemSaldoException(disponivel);
         }
         else{
         this.disponivel -= valor;
             }
         }
     
-    public boolean testaSaldo(float valor){
+    public boolean testaSaldo(float valor) throws SemSaldoException{
+        if(valor > disponivel){
+            throw new SemSaldoException(disponivel);
+        }
+        else{
         return valor <= disponivel;
+        }
     }
     
     public void retiraValor(float valor){
@@ -83,13 +89,20 @@ public class Apostador extends Utilizador implements Observer {
                                 
     }
 
+  
+
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Evento o, Object arg) {
         float valor =(float) arg;
         if(o!=null){    
             Notificacao nota = new Notificacao("Foi encerrado um evento e ganhou " + valor +"€",false);
             super.addNotificacao(nota);
-        }
+        }}
+
+    @Override
+    public void update(String[] equipas) {
+        Notificacao nota = new Notificacao("Foram alteradas as odds do evento "+ equipas[0] + " -- " + equipas[2],false);
+        super.addNotificacao(nota);
     }
     
 }

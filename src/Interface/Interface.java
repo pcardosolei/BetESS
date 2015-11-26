@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import Exception.*;
 import app.Sistema;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -17,23 +18,26 @@ public class Interface {
     
     private static boolean flag1;
     private static Sistema sistema;
-    private static int bookie; //Mudar para string
-    private static int apostador; //Mudar para string
+    private static String bookie; //Mudar para string
+    private static String apostador; //Mudar para string
     private static int login;
     
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         
         flag1 = true;
-        bookie = -1;
-        apostador = -1;
+        bookie = "";
+        apostador = "";
         
         sistema = new Sistema();
         Scanner entrada = new Scanner(System.in);
         int opcao = -1; //opcao scanner 
+        try{
         while(opcao!=2){
             System.out.println("1-Entrar na aplicação");
             System.out.println("2-Sair da aplicação");
+            
             opcao = Integer.parseInt(entrada.nextLine());
+            
             if(opcao == 1){
                 menuInicial();
             }
@@ -41,25 +45,31 @@ public class Interface {
               parteBookie();
             } else if(login==2){
               parteApostador();  
-           }
+           }     
         } 
+        } catch(Exception e){
+                System.out.println("Erro no scanner");
+            }
     }
    
     public static void parteBookie(){
                 int opcao;
                 Scanner entrada = new Scanner(System.in);
+                try{
                 do{
                      //colocar o sistema a devolver notificaçoes
                      System.out.println("----Notificações----"); 
                      System.out.println(sistema.retornaNotificacoesBookie(bookie));     
                     DadosMenuBookie();
+                    
                     opcao = Integer.parseInt(entrada.nextLine());  
+                    
                     switch(opcao){           
                     case 1: criarEvento();
                         break;
                     case 2: System.out.println(sistema.listaEventos());
                         break;
-                    case 3: editarOdds(); //aqui falta testar quem muda as odds
+                    case 3: editarOdds(); 
                         break;
                     case 4: listaHistoricoEvento();
                         break;
@@ -69,19 +79,24 @@ public class Interface {
                         break;
                     case 7: finalizarEvento();
                         break;
-                    case 8: //bookiesFechadoAberto();
+                    case 8: testarCriteria();
                         break;
                     default:
                         break;
                     }
                 } while(opcao != 0);
+                } catch(Exception e){
+                        System.out.println("Erro no scanner");
+                         }
                 login = -1;
                 flag1 = true;
+                bookie = "";
     }
     
     public static void parteApostador(){
                 int opcao;
                 Scanner entrada = new Scanner(System.in);
+                try{
                  do{
                     System.out.println("----Notificações----");
                     System.out.println(sistema.retornaNotificacoesApostador(apostador));
@@ -104,8 +119,12 @@ public class Interface {
                         break;
                     }
                 } while(opcao != 0);
+                 } catch(Exception e){
+                    System.out.println("Erro no scanner");
+                 }
                 login = -1;
                 flag1 = true;
+                apostador = "";
     }   
    
    public static void Login(){
@@ -120,7 +139,7 @@ public class Interface {
                  System.out.print("Password: ");
                  pw = entrada.nextLine(); 
                  bookie = sistema.verificaBookie(user,pw);
-                 if(bookie != -1){ 
+                 if(!"".equals(bookie)){ 
                     login = 1;
                     flag1 = false;
                  }
@@ -130,7 +149,7 @@ public class Interface {
                  System.out.print("Password: ");
                  pw = entrada.nextLine(); 
                  apostador = sistema.verificaApostador(user,pw);
-                 if(apostador != -1){
+                 if(!"".equals(apostador)){
                     login = 2;  
                     flag1 = false; 
                  }
@@ -146,6 +165,7 @@ public class Interface {
        String nome;
        String email;
        String password;
+       String nickname;
        int opcao;
        System.out.println("Introduza o seu nome");
        nome = entrada.nextLine();
@@ -153,12 +173,14 @@ public class Interface {
        email = entrada.nextLine();
        System.out.println("Password");
        password = entrada.nextLine();
+       System.out.println("Nome de Entrada");
+       nickname = entrada.nextLine();
        System.out.println("Quer ser apostador(1) ou bookie (2)?");
        opcao = Integer.parseInt(entrada.nextLine());     
        switch(opcao){
-           case 1: sistema.criarApostador(nome, email, password);
+           case 1: sistema.criarApostador(nome, email, password,nickname);
                    break;
-           case 2: sistema.criarBookie(nome, email, password);
+           case 2: sistema.criarBookie(nome, email, password,nickname);
                    break; 
            default: System.out.println("Introduziu dados errados");
                    break;
@@ -206,10 +228,13 @@ public class Interface {
             odds[1] = Float.parseFloat(in.nextLine());
             System.out.println("Odd Vitoria " + equipas[2]);
             odds[2] = Float.parseFloat(in.nextLine());
-            sistema.editarOdds(codigo,odds);
-        } catch(Exception e){
+            sistema.editarOdds(codigo,odds,bookie);
+        } catch(BookieIncorretoException e ) {
+            System.out.println("O evento pertence a "+ e.getName());
+        }   
+         catch(Exception e){
             System.out.println("Não encontrou o evento");
-        }
+        } 
     }
     
     public static void listaHistoricoEvento(){
@@ -245,7 +270,7 @@ public class Interface {
         }
     }
     
-    public static void finalizarEvento(){
+    public static void finalizarEvento() {
         Scanner in = new Scanner(System.in);
         System.out.println("Qual é o Evento?");
         try{
@@ -253,11 +278,25 @@ public class Interface {
             System.out.println(sistema.showEvento(codigo));
             System.out.println("Vencedor?");
             int vencedor = Integer.parseInt(in.nextLine());
-            sistema.finalizarEvento(codigo,vencedor);
+            sistema.finalizarEvento(codigo,vencedor,bookie);
+        } catch(BookieIncorretoException e ) {
+            System.out.println("O evento pertence a "+ e.getName());       
         } catch(NullPointerException e){
             System.out.println("Evento não encontrado");
         } catch(InputMismatchException e){
             System.out.println("Erro na Leitura");
+        }
+    }
+    
+    private static void testarCriteria(){
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Introduza critérios");
+        String linha = in.nextLine();
+        try{
+        System.out.println(sistema.testaCriteria(linha));
+        } catch(NullPointerException e){
+            System.out.println("Erro na busca de dados");
         }
     }
     /*
@@ -268,23 +307,27 @@ public class Interface {
         Scanner in = new Scanner(System.in);
         System.out.println("Introduza o código do evento");
         codigo = Integer.parseInt(in.nextLine());
+        System.out.println(sistema.showEvento(codigo));
         System.out.println("Qual e a sua opcao: 0 - TeamA win | 1 - Draw | 2 - TeamB win");
         opcao = Integer.parseInt(in.nextLine());
         System.out.println("Que valor prentende apostar €:");
         valor = Integer.parseInt(in.nextLine());
       try{
+          try{
           if(sistema.testarSaldo(apostador, valor)){
             sistema.criarAposta(codigo,apostador,valor,opcao);
             System.out.println("Criou uma aposta no Evento: " + codigo + " E apostou: "+valor +" Euros em: "+ sistema.escolha(codigo,opcao));
-          }
-          else {
-              System.out.println("Está sem graveto");
-          }
-        } catch(Exception e){
+             }
+          
+            } catch(SemSaldoException e){
+               System.out.println(e.getMessage());
+            } 
+        }catch(Exception e){
             System.out.println("Não encontrou o evento");
         }
 
-    }
+        }
+    
     public static void depositar(){
        Scanner in = new Scanner(System.in);
        System.out.println("Valor a depositar?");
@@ -297,7 +340,11 @@ public class Interface {
        Scanner in = new Scanner(System.in);
        System.out.println("Valor a levantar?");
        int valor = Integer.parseInt(in.nextLine());
+       try{
        sistema.levantar(valor,apostador);
+       }catch(SemSaldoException e){
+           System.out.println(e.getMessage());
+       }
     }
     
     public static void consultarSaldo(){

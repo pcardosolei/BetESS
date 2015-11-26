@@ -10,7 +10,6 @@ package Criteria;
  * @author PauloCardoso
  */
 import Eventos.Evento;
-import Utilizadores.Bookie;
 import java.util.List;
 
 public class AndCriteria implements Criteria {
@@ -22,18 +21,35 @@ public class AndCriteria implements Criteria {
       this.criteria = criteria;
       this.otherCriteria = otherCriteria; 
    }
+   
+   public AndCriteria(AndCriteria a){
+       this.criteria = a.getCriteria();
+       this.otherCriteria = a.getOtherCriteria();
+   }
 
    @Override
    public List<Evento> meetCriteria(List<Evento> evento) {
    
-      List<Evento> firstCriteriaPersons = criteria.meetCriteria(evento);		
-      return otherCriteria.meetCriteria(firstCriteriaPersons);
+      List<Evento> firstCriteriaPersons = getCriteria().meetCriteria(evento);		
+      return getOtherCriteria().meetCriteria(firstCriteriaPersons);
    }
 
-    @Override
-    public List<Evento> meetCriteria(List<Evento> eventos, Bookie b) {
-      List<Evento> firstCriteriaPersons = criteria.meetCriteria(eventos,b);		
-      return otherCriteria.meetCriteria(firstCriteriaPersons,b);
-  
+   public AndCriteria clone(){
+       return new AndCriteria(this);
+           
+   }
+
+    /**
+     * @return the criteria
+     */
+    public Criteria getCriteria() {
+        return criteria;
+    }
+
+    /**
+     * @return the otherCriteria
+     */
+    public Criteria getOtherCriteria() {
+        return otherCriteria;
     }
 }
