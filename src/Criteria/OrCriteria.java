@@ -21,11 +21,17 @@ public class OrCriteria implements Criteria {
       this.criteria = criteria;
       this.otherCriteria = otherCriteria; 
    }
+   
+     public OrCriteria(OrCriteria a){
+       this.criteria = a.getCriteria();
+       this.otherCriteria = a.getOtherCriteria();
+   }
+
 
    @Override
    public List<Evento> meetCriteria(List<Evento> eventos) {
-      List<Evento> firstCriteriaItems = criteria.meetCriteria(eventos);
-      List<Evento> otherCriteriaItems = otherCriteria.meetCriteria(eventos);
+      List<Evento> firstCriteriaItems = getCriteria().meetCriteria(eventos);
+      List<Evento> otherCriteriaItems = getOtherCriteria().meetCriteria(eventos);
 
       for (Evento evento : otherCriteriaItems) {
          if(!firstCriteriaItems.contains(evento)){
@@ -35,5 +41,21 @@ public class OrCriteria implements Criteria {
       return firstCriteriaItems;
    }
    
-   public OrCriteria clone(){return null;}
+   public OrCriteria clone(){
+       return new OrCriteria(this);
+   }
+
+    /**
+     * @return the criteria
+     */
+    public Criteria getCriteria() {
+        return criteria;
+    }
+
+    /**
+     * @return the otherCriteria
+     */
+    public Criteria getOtherCriteria() {
+        return otherCriteria;
+    }
 }

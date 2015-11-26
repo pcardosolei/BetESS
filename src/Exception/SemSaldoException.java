@@ -17,6 +17,6 @@ public class SemSaldoException extends Exception{
     }
     
     public String getMessage(){
-        return "So tem disponivel "+ this.disponivel;
+        return "ERRO : So tem disponivel "+ this.disponivel;
     }
 }

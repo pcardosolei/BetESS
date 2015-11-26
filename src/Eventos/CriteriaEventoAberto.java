@@ -6,6 +6,7 @@
 package Eventos;
 
 import Criteria.Criteria;
+import Utilizadores.Bookie;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,6 @@ import java.util.List;
  */
 public class CriteriaEventoAberto implements Criteria {
 
-    
-    
     @Override
     public List<Evento> meetCriteria(List<Evento> eventos) {
            List<Evento> aux = new ArrayList<Evento>();
@@ -28,8 +27,17 @@ public class CriteriaEventoAberto implements Criteria {
            }
            return aux;
     }
-    
-    public CriteriaEventoAberto clone(){
-        return new CriteriaEventoAberto();
+
+    @Override
+    public List<Evento> meetCriteria(List<Evento> eventos, Bookie b) {
+          List<Evento> aux = new ArrayList<>();
+           
+           for(Evento a: eventos)
+           {
+               if(a.isEstado())
+                   aux.add(a);
+           }
+           return aux;
     }
+    
 }

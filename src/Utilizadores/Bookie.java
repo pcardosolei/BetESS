@@ -6,9 +6,10 @@
 package Utilizadores;
 
 
+import Eventos.Evento;
+import Observer.Observer;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+
 
 /**
  *
@@ -17,8 +18,8 @@ import java.util.Observer;
 public class Bookie extends Utilizador implements Observer {
     
     
-    public Bookie(String nome, String email,String password){
-        super(nome,email,password);
+    public Bookie(String nome, String email,String password,String nickname){
+        super(nome,email,password,nickname);
     }
 
     
@@ -28,8 +29,10 @@ public class Bookie extends Utilizador implements Observer {
     }
     
     
+   
+
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Evento o,Object arg) {
         ArrayList<Aposta> apostas =(ArrayList<Aposta>) arg;
         int soma = 0;
         if(o!=null){
@@ -39,7 +42,12 @@ public class Bookie extends Utilizador implements Observer {
              Notificacao nota = new Notificacao("Foram apostados " + soma + "€", false);
              super.addNotificacao(nota);
         }
-            
+    }
+
+    @Override
+    public void update(String[] equipas) {
+        Notificacao nota = new Notificacao("Foram alteradas as odds do evento "+ equipas[0] + " -- " + equipas[2],false);
+        super.addNotificacao(nota);
     }
     
 }

@@ -16,38 +16,24 @@ import java.util.List;
  */
 public class CriteriaEventoBookie implements Criteria {
 
-    private Bookie bookie;
-    
-    public CriteriaEventoBookie(Bookie b){
-        this.bookie=b;
-    }
-    
-    public CriteriaEventoBookie(CriteriaEventoBookie b){
-        
-        this.bookie = b.getBookie();
-    }
-    
-    
     @Override
     public List<Evento> meetCriteria(List<Evento> eventos) {
         ArrayList<Evento> aux = new ArrayList<>();
+        return aux;
+        
+     }
+
+    @Override
+    public List<Evento> meetCriteria(List<Evento> eventos, Bookie b) {
+        ArrayList<Evento> aux = new ArrayList<>();
         
         for(Evento a: eventos){
-            if(a.getBookie().equals(getBookie()))
+            if(a.getBookie().equals(b))
                 aux.add(a);
         }
         
         return aux;
     }
     
-    public CriteriaEventoBookie clone(){
-        return new CriteriaEventoBookie(this);
-    }
-
-    /**
-     * @return the bookie
-     */
-    public Bookie getBookie() {
-        return bookie;
-    }
+    
 }
