@@ -28,9 +28,6 @@ public class Bookie extends Utilizador implements Observer {
         return super.verificaUtilizador(nome, password);
     }
     
-    
-   
-
     @Override
     public void update(Evento o,Object arg) {
         ArrayList<Aposta> apostas =(ArrayList<Aposta>) arg;

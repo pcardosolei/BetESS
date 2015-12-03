@@ -34,8 +34,6 @@ public class Aposta {
         this.estado = true;
     }
     
- 
-
     /**
      * @return the valor
      */

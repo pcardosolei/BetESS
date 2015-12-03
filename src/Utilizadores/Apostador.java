@@ -89,8 +89,6 @@ public class Apostador extends Utilizador implements Observer {
                                 
     }
 
-  
-
     @Override
     public void update(Evento o, Object arg) {
         float valor =(float) arg;

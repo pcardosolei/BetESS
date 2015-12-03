@@ -211,12 +211,7 @@ public class Evento implements Subject {
             }
         return aux;
     }
-    
-    
-   
-    
- 
-    
+  
     /**
      * @return the bookie
      */

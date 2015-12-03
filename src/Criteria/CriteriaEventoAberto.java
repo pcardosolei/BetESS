@@ -19,7 +19,7 @@ public class CriteriaEventoAberto implements Criteria {
     
     @Override
     public List<Evento> meetCriteria(List<Evento> eventos) {
-           List<Evento> aux = new ArrayList<Evento>();
+           List<Evento> aux = new ArrayList<>();
            
            for(Evento a: eventos)
            {

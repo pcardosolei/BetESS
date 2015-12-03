@@ -58,4 +58,5 @@ public class Notificacao {
         StringBuilder result = new StringBuilder();
         result.append(this.texto);
         return result.toString();
-    }}
+    }
+}
